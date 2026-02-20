@@ -1,0 +1,121 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import Container from '../components/Container.astro';
+---
+
+<Layout title="Inicio">
+  <!-- Hero Section -->
+  <Hero />
+
+  <!-- Features Section -->
+  <section class="bg-gradient-to-b from-bg-light to-white py-28">
+    <Container>
+      <div class="text-center mb-20">
+        <div class="inline-block bg-primary/10 text-primary font-semibold px-6 py-2 rounded-full mb-6">
+          ✨ Funcionalidades
+        </div>
+        <h2 class="text-5xl md:text-6xl font-display font-bold mb-6">
+          Todo Lo Que <span class="bg-gradient-to-r from-primary to-accent-orange bg-clip-text text-transparent">Necesitas</span>
+        </h2>
+        <p class="text-xl text-text-secondary max-w-2xl mx-auto">
+          Herramientas profesionales para llevar tu entrenamiento al siguiente nivel
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <Card icon="🤖" iconColor="primary">
+          <h3 class="text-2xl font-bold mb-4">Planes con IA</h3>
+          <p class="text-text-secondary text-lg leading-relaxed">
+            Rutinas personalizadas generadas por inteligencia artificial según tus objetivos y nivel.
+          </p>
+        </Card>
+
+        <Card icon="📊" iconColor="success">
+          <h3 class="text-2xl font-bold mb-4">Tracking RPE</h3>
+          <p class="text-text-secondary text-lg leading-relaxed">
+            Sistema de esfuerzo percibido para optimizar cada sesión de entrenamiento.
+          </p>
+        </Card>
+
+        <Card icon="📈" iconColor="orange">
+          <h3 class="text-2xl font-bold mb-4">Analíticas Pro</h3>
+          <p class="text-text-secondary text-lg leading-relaxed">
+            Gráficos detallados y estadísticas avanzadas de tu progreso.
+          </p>
+        </Card>
+
+        <Card icon="💪" iconColor="warning">
+          <h3 class="text-2xl font-bold mb-4">+200 Ejercicios</h3>
+          <p class="text-text-secondary text-lg leading-relaxed">
+            Biblioteca completa con vídeos y variantes para todos los niveles.
+          </p>
+        </Card>
+
+        <Card icon="🎯" iconColor="primary">
+          <h3 class="text-2xl font-bold mb-4">Objetivos Smart</h3>
+          <p class="text-text-secondary text-lg leading-relaxed">
+            Define metas claras y recibe planes optimizados para alcanzarlas.
+          </p>
+        </Card>
+
+        <Card icon="🏆" iconColor="success">
+          <h3 class="text-2xl font-bold mb-4">Sistema de Logros</h3>
+          <p class="text-text-secondary text-lg leading-relaxed">
+            Mantente motivado desbloqueando badges y completando desafíos.
+          </p>
+        </Card>
+      </div>
+    </Container>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="relative section-dark py-28 overflow-hidden">
+    <!-- Background effects -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[#0a0e1a] via-[#1349ec]/15 to-[#0a0e1a]"></div>
+    <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary rounded-full opacity-20 blur-[120px]"></div>
+    <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent-orange rounded-full opacity-15 blur-[120px]"></div>
+    
+    <Container class="relative z-10 text-center">
+      <h2 class="text-5xl md:text-6xl font-display font-bold mb-8">
+        ¿Listo Para <br/>
+        <span class="bg-gradient-to-r from-primary via-[#3b6ef5] to-accent-orange bg-clip-text text-transparent">
+          Transformarte
+        </span>?
+      </h2>
+      <p class="text-xl text-text-gray max-w-2xl mx-auto mb-12 leading-relaxed">
+        Únete a <span class="text-white font-semibold">10,000+ usuarios</span> que ya están alcanzando<br/>
+        sus objetivos fitness con TitanMood.
+      </p>
+      
+      <div class="flex gap-5 justify-center flex-wrap">
+        <a href="#" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-primary to-primary-dark text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(19,73,236,0.6)]">
+          <span class="text-2xl">🍎</span>
+          <span>Descargar para iOS</span>
+        </a>
+        
+        <a href="#" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-accent-success to-emerald-600 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(16,185,129,0.6)]">
+          <span class="text-2xl">🤖</span>
+          <span>Descargar para Android</span>
+        </a>
+      </div>
+      
+      <!-- Trust indicators -->
+      <div class="flex items-center justify-center gap-12 mt-16 pt-12 border-t border-white/10 flex-wrap">
+        <div class="flex items-center gap-2">
+          <span class="text-accent-warning text-2xl">⭐⭐⭐⭐⭐</span>
+          <span class="text-text-gray">4.9 en App Store</span>
+        </div>
+        <div class="text-text-gray">
+          <span class="text-white font-semibold">500K+</span> descargas
+        </div>
+        <div class="text-text-gray">
+          <span class="text-white font-semibold">10K+</span> reseñas
+        </div>
+      </div>
+    </Container>
+  </section>
+</Layout>

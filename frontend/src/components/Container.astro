@@ -1,0 +1,14 @@
+---
+// src/components/Container.astro
+// Container responsivo con max-width
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`container-custom ${className}`}>
+  <slot />
+</div>

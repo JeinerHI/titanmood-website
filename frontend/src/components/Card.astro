@@ -1,0 +1,29 @@
+---
+interface Props {
+  icon?: string;
+  iconColor?: 'primary' | 'success' | 'orange' | 'warning';
+  class?: string;
+}
+
+const { 
+  icon,
+  iconColor = 'primary',
+  class: className = ''
+} = Astro.props;
+
+const iconGradients = {
+  primary: 'bg-gradient-to-br from-primary to-primary-dark',
+  success: 'bg-gradient-to-br from-accent-success to-emerald-600',
+  orange: 'bg-gradient-to-br from-accent-orange to-orange-600',
+  warning: 'bg-gradient-to-br from-accent-warning to-yellow-600'
+};
+---
+
+<div class={`group bg-white p-8 rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_50px_rgba(19,73,236,0.2)] transition-all duration-500 hover:-translate-y-2 border border-gray-100 ${className}`}>
+  {icon && (
+    <div class={`w-16 h-16 ${iconGradients[iconColor]} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+      <span class="text-4xl">{icon}</span>
+    </div>
+  )}
+  <slot />
+</div>

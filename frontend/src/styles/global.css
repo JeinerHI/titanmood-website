@@ -1,0 +1,110 @@
+/* Importar fuentes de Google */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+
+/* Directivas de Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS globales - TitanMood Brand */
+:root {
+  /* Primary Colors - De la app */
+  --primary-blue: #1349ec;
+  --primary-blue-dark: #0f3bc5;
+  
+  /* Backgrounds & Surfaces - Adaptado para web */
+  --bg-white: #ffffff;
+  --bg-light: #f8fafc;
+  --bg-deep-navy: #0a0e1a;
+  --surface-navy: #161c2d;
+  --surface-navy-light: #1f293d;
+  
+  /* Text Colors - De la app */
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-white: #ffffff;
+  --text-gray: #94a3b8;
+  --text-dim: #cbd5e1;
+  
+  /* Accent Colors */
+  --accent-orange: #ff6b35;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-error: #ef4444;
+  
+  /* Escala de espaciado */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  --spacing-3xl: 6rem;
+
+  /* Container */
+  --container-max-width: 1280px;
+  --container-padding: 1.5rem;
+}
+
+/* Estilos base del body - SIN @apply */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings con font display */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Links */
+a {
+  transition: color 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--primary-blue);
+  color: white;
+}
+
+/* Reset de márgenes */
+* {
+  box-sizing: border-box;
+}
+
+/* Componentes reutilizables */
+@layer components {
+  .container-custom {
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  /* Sección oscura (usa colores de la app) */
+  .section-dark {
+    background-color: var(--bg-deep-navy);
+    color: var(--text-white);
+  }
+
+  .section-dark h1,
+  .section-dark h2,
+  .section-dark h3,
+  .section-dark h4,
+  .section-dark h5,
+  .section-dark h6 {
+    color: var(--text-white);
+  }
+}

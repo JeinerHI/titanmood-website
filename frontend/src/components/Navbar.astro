@@ -1,0 +1,63 @@
+---
+// src/components/Navbar.astro
+---
+
+<nav
+    class="fixed top-0 left-0 right-0 z-50 bg-bg-navy/95 backdrop-blur-md border-b border-white/10"
+>
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-3">
+                <img
+                    src="../../public/logo.webp"
+                    alt="TitanMood Logo"
+                    class="w-10 h-10 object-contain"
+                />
+                <span class="text-white font-display font-bold text-xl"
+                    >TitanMood</span
+                >
+            </a>
+
+            <!-- Nav Links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a
+                    href="#entrena"
+                    class="text-white/70 hover:text-white transition-colors"
+                    >Entrena</a
+                >
+                <a
+                    href="#explora"
+                    class="text-white/70 hover:text-white transition-colors"
+                    >Explora</a
+                >
+                <a
+                    href="#compite"
+                    class="text-white/70 hover:text-white transition-colors"
+                    >Compite</a
+                >
+                <a
+                    href="#precios"
+                    class="text-white/70 hover:text-white transition-colors"
+                    >Precios</a
+                >
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="flex items-center gap-4">
+                <a
+                    href="#"
+                    class="hidden md:inline-block text-white/70 hover:text-white transition-colors"
+                >
+                    Iniciar Sesión
+                </a>
+                <a
+                    href="#cta"
+                    class="bg-accent-orange hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all"
+                >
+                    Empezar Gratis
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

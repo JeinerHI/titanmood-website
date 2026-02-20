@@ -1,121 +1,541 @@
 ---
-// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Card from '../components/Card.astro';
-import Button from '../components/Button.astro';
-import Container from '../components/Container.astro';
+import Navbar from '../components/Navbar.astro';
 ---
 
 <Layout title="Inicio">
+  <Navbar />
+  
   <!-- Hero Section -->
-  <Hero />
-
-  <!-- Features Section -->
-  <section class="bg-gradient-to-b from-bg-light to-white py-28">
-    <Container>
-      <div class="text-center mb-20">
-        <div class="inline-block bg-primary/10 text-primary font-semibold px-6 py-2 rounded-full mb-6">
-          ✨ Funcionalidades
-        </div>
-        <h2 class="text-5xl md:text-6xl font-display font-bold mb-6">
-          Todo Lo Que <span class="bg-gradient-to-r from-primary to-accent-orange bg-clip-text text-transparent">Necesitas</span>
-        </h2>
-        <p class="text-xl text-text-secondary max-w-2xl mx-auto">
-          Herramientas profesionales para llevar tu entrenamiento al siguiente nivel
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Background Image Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-bg-navy via-[#1a1f35] to-bg-navy"></div>
+    
+    <!-- Pattern overlay -->
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    
+    <!-- Glow effects -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-orange/20 rounded-full blur-[120px]"></div>
+    
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
+      <!-- Badge -->
+      <div class="inline-block bg-gradient-to-r from-accent-orange/20 to-accent-orange/10 border border-accent-orange/30 rounded-full px-5 py-2 mb-8 backdrop-blur-sm">
+        <span class="text-accent-orange font-semibold text-sm">TitanMood Pro</span>
+      </div>
+      
+      <!-- Main Title -->
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-[1.1]">
+        Lo Mejor de TitanMood.
+        <span class="block mt-2">
+          <span class="text-accent-orange">Hecho Para</span> Tus Metas.
+        </span>
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed">
+        Entrenamiento más inteligente, progreso constante<br class="hidden md:block"/> y exploración sin límites.
+      </p>
+      
+      <!-- CTAs -->
+      <div class="flex gap-4 justify-center flex-wrap mb-20">
+        <a href="#cta" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-accent-orange to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,107,53,0.5)] overflow-hidden">
+          <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></span>
+          <span class="relative">Prueba TitanMood Pro</span>
+        </a>
+        <a href="#entrena" class="inline-flex items-center gap-3 bg-white/5 border-2 border-white/20 text-white px-8 py-4 rounded-xl font-bold text-lg backdrop-blur-sm hover:bg-white/10 hover:border-white/30 transition-all duration-300">
+          <span>Ver Demo</span>
+        </a>
+      </div>
+      
+      <!-- Section subtitle -->
+      <div class="mb-8">
+        <p class="text-white/60 text-lg mb-6">
+          Todo lo que necesitas, <span class="text-primary font-semibold">en un solo lugar</span>
         </p>
       </div>
       
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <Card icon="🤖" iconColor="primary">
-          <h3 class="text-2xl font-bold mb-4">Planes con IA</h3>
-          <p class="text-text-secondary text-lg leading-relaxed">
-            Rutinas personalizadas generadas por inteligencia artificial según tus objetivos y nivel.
-          </p>
-        </Card>
-
-        <Card icon="📊" iconColor="success">
-          <h3 class="text-2xl font-bold mb-4">Tracking RPE</h3>
-          <p class="text-text-secondary text-lg leading-relaxed">
-            Sistema de esfuerzo percibido para optimizar cada sesión de entrenamiento.
-          </p>
-        </Card>
-
-        <Card icon="📈" iconColor="orange">
-          <h3 class="text-2xl font-bold mb-4">Analíticas Pro</h3>
-          <p class="text-text-secondary text-lg leading-relaxed">
-            Gráficos detallados y estadísticas avanzadas de tu progreso.
-          </p>
-        </Card>
-
-        <Card icon="💪" iconColor="warning">
-          <h3 class="text-2xl font-bold mb-4">+200 Ejercicios</h3>
-          <p class="text-text-secondary text-lg leading-relaxed">
-            Biblioteca completa con vídeos y variantes para todos los niveles.
-          </p>
-        </Card>
-
-        <Card icon="🎯" iconColor="primary">
-          <h3 class="text-2xl font-bold mb-4">Objetivos Smart</h3>
-          <p class="text-text-secondary text-lg leading-relaxed">
-            Define metas claras y recibe planes optimizados para alcanzarlas.
-          </p>
-        </Card>
-
-        <Card icon="🏆" iconColor="success">
-          <h3 class="text-2xl font-bold mb-4">Sistema de Logros</h3>
-          <p class="text-text-secondary text-lg leading-relaxed">
-            Mantente motivado desbloqueando badges y completando desafíos.
-          </p>
-        </Card>
+      <!-- Tab navigation -->
+      <div class="inline-flex bg-white/5 backdrop-blur-sm rounded-xl p-2 border border-white/10">
+        <button onclick="showTab('entrena')" id="tab-entrena" class="tab-button px-6 py-3 rounded-lg text-white font-semibold transition-all bg-primary">
+          Entrena
+        </button>
+        <button onclick="showTab('explora')" id="tab-explora" class="tab-button px-6 py-3 rounded-lg text-white/60 font-semibold transition-all hover:text-white hover:bg-white/5">
+          Explora
+        </button>
+        <button onclick="showTab('compite')" id="tab-compite" class="tab-button px-6 py-3 rounded-lg text-white/60 font-semibold transition-all hover:text-white hover:bg-white/5">
+          Compite
+        </button>
       </div>
-    </Container>
+    </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="relative section-dark py-28 overflow-hidden">
-    <!-- Background effects -->
-    <div class="absolute inset-0 bg-gradient-to-br from-[#0a0e1a] via-[#1349ec]/15 to-[#0a0e1a]"></div>
-    <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary rounded-full opacity-20 blur-[120px]"></div>
-    <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent-orange rounded-full opacity-15 blur-[120px]"></div>
+  <!-- Entrena Section -->
+  <section id="entrena-content" class="tab-content relative py-32 overflow-hidden">
+    <!-- Dark background with overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1a1f35] via-bg-navy to-[#1a1f35]"></div>
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
     
-    <Container class="relative z-10 text-center">
-      <h2 class="text-5xl md:text-6xl font-display font-bold mb-8">
-        ¿Listo Para <br/>
-        <span class="bg-gradient-to-r from-primary via-[#3b6ef5] to-accent-orange bg-clip-text text-transparent">
-          Transformarte
-        </span>?
-      </h2>
-      <p class="text-xl text-text-gray max-w-2xl mx-auto mb-12 leading-relaxed">
-        Únete a <span class="text-white font-semibold">10,000+ usuarios</span> que ya están alcanzando<br/>
-        sus objetivos fitness con TitanMood.
-      </p>
-      
-      <div class="flex gap-5 justify-center flex-wrap">
-        <a href="#" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-primary to-primary-dark text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(19,73,236,0.6)]">
-          <span class="text-2xl">🍎</span>
-          <span>Descargar para iOS</span>
-        </a>
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Content -->
+        <div>
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 leading-tight">
+            Mejora Más Rápido Con
+            <span class="block text-accent-orange">Entrenamiento Inteligente</span>
+          </h2>
+          <p class="text-xl text-white/70 mb-12 leading-relaxed">
+            Cada objetivo que estableces y cada esfuerzo que registras te ayuda a entender tu rendimiento y alcanzar nuevas marcas personales.
+          </p>
+          
+          <!-- Features -->
+          <div class="space-y-8">
+            <!-- Feature 1 -->
+            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">📊</span>
+                </div>
+                <div>
+                  <div class="inline-block bg-primary/20 text-primary font-semibold px-3 py-1 rounded-full text-xs mb-2">
+                    RPE
+                  </div>
+                  <h3 class="text-xl font-bold text-white mb-2">Registra Tu Esfuerzo</h3>
+                  <p class="text-white/60 leading-relaxed">
+                    Sistema RPE para trackear la intensidad de cada serie y optimizar tu entrenamiento.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-accent-success to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">📈</span>
+                </div>
+                <div>
+                  <div class="inline-block bg-accent-success/20 text-accent-success font-semibold px-3 py-1 rounded-full text-xs mb-2">
+                    Nuevo
+                  </div>
+                  <h3 class="text-xl font-bold text-white mb-2">Compara Tu Progreso</h3>
+                  <p class="text-white/60 leading-relaxed">
+                    Visualiza tu evolución semana a semana con gráficos claros y detallados.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-accent-orange to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">💡</span>
+                </div>
+                <div>
+                  <div class="inline-block bg-accent-orange/20 text-accent-orange font-semibold px-3 py-1 rounded-full text-xs mb-2">
+                    Analíticas
+                  </div>
+                  <h3 class="text-xl font-bold text-white mb-2">Datos Accionables</h3>
+                  <p class="text-white/60 leading-relaxed">
+                    Convierte tus números en recomendaciones prácticas para mejorar.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <a href="#cta" class="inline-flex items-center gap-2 text-accent-orange font-bold text-lg mt-10 hover:gap-4 transition-all group">
+            <span>Empezar a Entrenar</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
         
-        <a href="#" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-accent-success to-emerald-600 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(16,185,129,0.6)]">
+        <!-- Mock iPhone -->
+        <div class="relative">
+          <div class="relative mx-auto w-full max-w-sm">
+            <!-- Phone mockup -->
+            <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
+              <!-- Notch -->
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl"></div>
+              
+              <!-- Screen -->
+              <div class="relative w-full h-full bg-gradient-to-br from-primary/20 to-accent-orange/20 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
+                <div class="text-center p-8">
+                  <div class="text-6xl mb-4">📊</div>
+                  <p class="text-white/80 text-sm">Dashboard de analíticas</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Glow effect -->
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent-orange/30 rounded-[3rem] blur-3xl -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explora Section -->
+  <section id="explora-content" class="tab-content hidden py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Mock iPhone -->
+        <div class="relative order-2 lg:order-1">
+          <div class="relative mx-auto w-full max-w-sm">
+            <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl"></div>
+              <div class="relative w-full h-full bg-gradient-to-br from-primary/20 to-accent-success/20 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
+                <div class="text-center p-8">
+                  <div class="text-6xl mb-4">💪</div>
+                  <p class="text-white/80 text-sm">Biblioteca de ejercicios</p>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent-success/30 rounded-[3rem] blur-3xl -z-10"></div>
+          </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="order-1 lg:order-2">
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
+            Explora Con
+            <span class="block text-primary">Confianza</span>
+          </h2>
+          <p class="text-xl text-text-secondary mb-12 leading-relaxed">
+            Descubre nuevos ejercicios y despega sin adivinar. Mejor planificación y entrenamientos más efectivos.
+          </p>
+          
+          <div class="space-y-8">
+            <div class="bg-bg-light border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">📚</span>
+                </div>
+                <div>
+                  <div class="inline-block bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full text-xs mb-2">
+                    Biblioteca
+                  </div>
+                  <h3 class="text-xl font-bold mb-2">+200 Ejercicios</h3>
+                  <p class="text-text-secondary leading-relaxed">
+                    Amplia biblioteca con instrucciones, variaciones y alternativas para cada grupo muscular.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-bg-light border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-accent-success to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">📊</span>
+                </div>
+                <div>
+                  <div class="inline-block bg-accent-success/10 text-accent-success font-semibold px-3 py-1 rounded-full text-xs mb-2">
+                    Datos
+                  </div>
+                  <h3 class="text-xl font-bold mb-2">Planifica Con Datos</h3>
+                  <p class="text-text-secondary leading-relaxed">
+                    Historial completo con métricas avanzadas. Visualiza volumen y zonas de mejora.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-bg-light border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-accent-orange to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span class="text-2xl">🔄</span>
+                </div>
+                <div>
+                  <div class="inline-block bg-accent-orange/10 text-accent-orange font-semibold px-3 py-1 rounded-full text-xs mb-2">
+                    Flexibilidad
+                  </div>
+                  <h3 class="text-xl font-bold mb-2">Agrega Variaciones</h3>
+                  <p class="text-text-secondary leading-relaxed">
+                    Incluye movilidad, accesorios o finishers para complementar tu rutina.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <a href="#cta" class="inline-flex items-center gap-2 text-primary font-bold text-lg mt-10 hover:gap-4 transition-all group">
+            <span>Explorar Ejercicios</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compite Section -->
+  <section id="compite-content" class="tab-content hidden relative py-32 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1a1f35] via-bg-navy to-[#1a1f35]"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 leading-tight">
+            Saca Lo Mejor De Ti Con
+            <span class="block text-accent-orange">Desafíos</span>
+          </h2>
+          <p class="text-xl text-white/70 mb-12 leading-relaxed">
+            Persigue marcas personales, compite con amigos o gana tu lugar en el ranking global.
+          </p>
+          
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-accent-warning to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <span class="text-3xl">🏆</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white mb-2">Sistema de Logros</h3>
+                <p class="text-white/60 leading-relaxed">
+                  Desbloquea badges al completar hitos: primera sesión, 10 entrenamientos, nuevos PRs.
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
+                <span class="text-3xl">👥</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white mb-2">Comparte Con Amigos</h3>
+                <p class="text-white/60 leading-relaxed">
+                  Convierte la motivación en competencia amistosa. Comparte logros y progreso.
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-accent-orange to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <span class="text-3xl">⭐</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white mb-2">Marcas Personales</h3>
+                <p class="text-white/60 leading-relaxed">
+                  Registra y celebra cada PR. Trackea sentadilla, press banca y peso muerto.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <a href="#cta" class="inline-flex items-center gap-2 text-accent-orange font-bold text-lg mt-10 hover:gap-4 transition-all group">
+            <span>Empezar a Competir</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+        
+        <div class="relative">
+          <div class="relative mx-auto w-full max-w-sm">
+            <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl"></div>
+              <div class="relative w-full h-full bg-gradient-to-br from-accent-warning/20 to-accent-orange/20 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
+                <div class="text-center p-8">
+                  <div class="text-6xl mb-4">🎯</div>
+                  <p class="text-white/80 text-sm">Sistema de logros</p>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-br from-accent-warning/30 to-accent-orange/30 rounded-[3rem] blur-3xl -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Table -->
+  <section id="precios" class="py-32 bg-white">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
+          Y Con Todo, Nos Referimos A <span class="text-primary">Todo</span>
+        </h2>
+      </div>
+      
+      <div class="bg-white rounded-3xl shadow-strong overflow-hidden border border-gray-100">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-surface-navy text-white">
+                <th class="text-left p-6 font-bold text-lg">Funcionalidad</th>
+                <th class="text-center p-6 font-bold text-lg">Gratis</th>
+                <th class="text-center p-6 font-bold text-lg bg-primary/90">Pro</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Registra tus actividades</td>
+                <td class="p-4 text-center"><span class="text-accent-success text-2xl">✓</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Conecta con la comunidad</td>
+                <td class="p-4 text-center"><span class="text-accent-success text-2xl">✓</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Tracking RPE por serie</td>
+                <td class="p-4 text-center"><span class="text-accent-success text-2xl">✓</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Analíticas avanzadas</td>
+                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Historial completo</td>
+                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Biblioteca de +200 ejercicios</td>
+                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+              <tr class="hover:bg-bg-light transition-colors">
+                <td class="p-4 font-medium">Sistema de logros</td>
+                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
+                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <p class="text-center text-text-secondary mt-8 text-sm">
+        Cada día, usuarios alcanzan sus metas con TitanMood.
+      </p>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section id="cta" class="relative py-40 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-bg-navy via-[#1a1f35] to-bg-navy"></div>
+    <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-accent-orange/15 rounded-full blur-[150px]"></div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <p class="text-accent-orange font-bold mb-6 text-lg">Cada día, usuarios alcanzan sus metas</p>
+      <h2 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-16 leading-tight">
+        Bienvenido Al Club.
+      </h2>
+      
+      <div class="flex gap-5 justify-center flex-wrap mb-20">
+        <a href="#" class="group inline-flex items-center gap-3 bg-white text-bg-navy px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all shadow-strong">
+          <span class="text-2xl">🍎</span>
+          <span>App Store</span>
+        </a>
+        <a href="#" class="group inline-flex items-center gap-3 bg-gradient-to-r from-accent-success to-emerald-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all shadow-strong">
           <span class="text-2xl">🤖</span>
-          <span>Descargar para Android</span>
+          <span>Google Play</span>
         </a>
       </div>
       
-      <!-- Trust indicators -->
-      <div class="flex items-center justify-center gap-12 mt-16 pt-12 border-t border-white/10 flex-wrap">
-        <div class="flex items-center gap-2">
-          <span class="text-accent-warning text-2xl">⭐⭐⭐⭐⭐</span>
-          <span class="text-text-gray">4.9 en App Store</span>
+      <div class="grid grid-cols-3 gap-12 max-w-2xl mx-auto pt-12 border-t border-white/10">
+        <div>
+          <div class="text-5xl font-bold text-white mb-2">4.9</div>
+          <div class="text-white/60 text-sm">Rating</div>
         </div>
-        <div class="text-text-gray">
-          <span class="text-white font-semibold">500K+</span> descargas
+        <div>
+          <div class="text-5xl font-bold text-white mb-2">10K+</div>
+          <div class="text-white/60 text-sm">Descargas</div>
         </div>
-        <div class="text-text-gray">
-          <span class="text-white font-semibold">10K+</span> reseñas
+        <div>
+          <div class="text-5xl font-bold text-white mb-2">2K+</div>
+          <div class="text-white/60 text-sm">Reseñas</div>
         </div>
       </div>
-    </Container>
+    </div>
   </section>
+
+  <!-- Footer -->
+  <footer class="bg-bg-navy text-white py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-12 mb-16">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent-orange rounded-lg flex items-center justify-center font-bold text-white">
+              TM
+            </div>
+            <span class="font-display font-bold text-xl">TitanMood</span>
+          </div>
+          <p class="text-white/60 text-sm leading-relaxed">
+            La app fitness que transforma tu entrenamiento. Disponible en iOS y Android.
+          </p>
+        </div>
+        
+        <div>
+          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">Producto</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#precios" class="text-white/60 hover:text-white transition-colors">Suscripción</a></li>
+            <li><a href="#explora" class="text-white/60 hover:text-white transition-colors">Ejercicios</a></li>
+            <li><a href="#compite" class="text-white/60 hover:text-white transition-colors">Desafíos</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">Comunidad</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="/blog" class="text-white/60 hover:text-white transition-colors">Blog</a></li>
+            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Eventos</a></li>
+            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Historias</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">Recursos</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Ayuda</a></li>
+            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Contacto</a></li>
+            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Privacidad</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+        <p class="text-white/60">© 2026 TitanMood. Todos los derechos reservados.</p>
+        <div class="flex gap-6 text-white/60">
+          <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+          <a href="#" class="hover:text-white transition-colors">Términos</a>
+          <a href="#" class="hover:text-white transition-colors">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tab Script -->
+  <script>
+    function showTab(tabName: string): void {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('hidden');
+      });
+      
+      document.querySelectorAll('.tab-button').forEach(el => {
+        el.classList.remove('bg-primary', 'text-white');
+        el.classList.add('text-white/60');
+      });
+      
+      const content = document.getElementById(tabName + '-content');
+      if (content) {
+        content.classList.remove('hidden');
+        content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      
+      const button = document.getElementById('tab-' + tabName);
+      if (button) {
+        button.classList.add('bg-primary', 'text-white');
+        button.classList.remove('text-white/60');
+      }
+    }
+    
+    (window as any).showTab = showTab;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      showTab('entrena');
+    });
+  </script>
 </Layout>

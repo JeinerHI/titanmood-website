@@ -16,6 +16,8 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://titanmood.com');
 const ogImage = new URL(image, Astro.site || 'https://titanmood.com');
+
+import '../styles/global.css';
 ---
 
 <!doctype html>
@@ -45,9 +47,7 @@ const ogImage = new URL(image, Astro.site || 'https://titanmood.com');
     <meta name="twitter:title" content={`${title} | TitanMood`} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    
-    <!-- Importar estilos globales -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
+
   </head>
   <body>
     <!-- Aquí irá el contenido de cada página -->

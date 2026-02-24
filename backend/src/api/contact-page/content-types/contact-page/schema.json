@@ -1,0 +1,45 @@
+{
+  "kind": "singleType",
+  "collectionName": "contact_pages",
+  "info": {
+    "singularName": "contact-page",
+    "pluralName": "contact-pages",
+    "displayName": "Contact Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "page_title": {
+      "type": "string",
+      "default": "Contáctanos"
+    },
+    "page_subtitle": {
+      "type": "text",
+      "default": "¿Tienes preguntas? Estamos aquí para ayudarte"
+    },
+    "contact_info_cards": {
+      "type": "component",
+      "component": "contact.contact-info-card",
+      "repeatable": true
+    },
+    "form_title": {
+      "type": "string",
+      "default": "Envíanos un mensaje"
+    },
+    "subject_options": {
+      "type": "component",
+      "component": "contact.form-subject-option",
+      "repeatable": true
+    },
+    "success_message_title": {
+      "type": "string",
+      "default": "¡Mensaje enviado!"
+    },
+    "success_message_text": {
+      "type": "string",
+      "default": "Te responderemos pronto"
+    }
+  }
+}

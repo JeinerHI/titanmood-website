@@ -1,63 +1,125 @@
 ---
-// src/components/Navbar.astro
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+
+// Fetch site settings
+const settingsRes = await fetch(`${API_URL}/site-setting?populate[navbar_logo][populate]=*&populate[navbar_links][populate]=*&populate[navbar_cta_buttons][populate]=*`);
+const settingsData = await settingsRes.json();
+const settings = settingsData.data;
+
+// Sort links and buttons by order
+const navLinks = settings.navbar_links?.sort((a: any, b: any) => a.order - b.order) || [];
+const ctaButtons = settings.navbar_cta_buttons?.sort((a: any, b: any) => a.order - b.order) || [];
+
+// Logo URL
+const logoUrl = settings.navbar_logo?.url 
+  ? (import.meta.env.DEV ? `http://localhost:1337${settings.navbar_logo.url}` : settings.navbar_logo.url)
+  : '/logo.webp';
 ---
 
-<nav
-    class="fixed top-0 left-0 right-0 z-50 bg-bg-navy/95 backdrop-blur-md border-b border-white/10"
->
-    <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-            <!-- Logo -->
-            <a href="/" class="flex items-center gap-3">
-                <img
-                    src="../../public/logo.webp"
-                    alt="TitanMood Logo"
-                    class="w-10 h-10 object-contain"
-                />
-                <span class="text-white font-display font-bold text-xl"
-                    >TitanMood</span
-                >
-            </a>
-
-            <!-- Nav Links -->
-            <div class="hidden md:flex items-center gap-8">
-                <a
-                    href="#entrena"
-                    class="text-white/70 hover:text-white transition-colors"
-                    >Entrena</a
-                >
-                <a
-                    href="#explora"
-                    class="text-white/70 hover:text-white transition-colors"
-                    >Explora</a
-                >
-                <a
-                    href="#compite"
-                    class="text-white/70 hover:text-white transition-colors"
-                    >Compite</a
-                >
-                <a
-                    href="#precios"
-                    class="text-white/70 hover:text-white transition-colors"
-                    >Precios</a
-                >
-            </div>
-
-            <!-- CTA Buttons -->
-            <div class="flex items-center gap-4">
-                <a
-                    href="#"
-                    class="hidden md:inline-block text-white/70 hover:text-white transition-colors"
-                >
-                    Iniciar Sesión
-                </a>
-                <a
-                    href="#cta"
-                    class="bg-accent-orange hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all"
-                >
-                    Empezar Gratis
-                </a>
-            </div>
+<nav class="fixed top-0 left-0 right-0 z-50 bg-bg-navy/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center p-0.5 shadow-lg border-2 border-primary/20">
+          <img 
+            src={logoUrl}
+            alt={`${settings.navbar_brand_text} Logo`}
+            class="w-10 h-10 object-contain rounded-xl"
+          />
         </div>
+        <span class="text-white font-display font-bold text-xl">{settings.navbar_brand_text}</span>
+      </a>
+      
+      <!-- Desktop Nav Links -->
+      <div class="hidden lg:flex items-center gap-8">
+        {navLinks.map((link: any) => (
+          <a href={link.url} class="text-white/70 hover:text-white transition-colors">
+            {link.label}
+          </a>
+        ))}
+      </div>
+      
+      <!-- CTA Buttons -->
+      <div class="hidden lg:flex items-center gap-4">
+        {ctaButtons.map((btn: any) => (
+          <a 
+            href={btn.url}
+            class={
+              btn.style === 'primary' 
+                ? 'bg-accent-orange hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all'
+                : btn.style === 'secondary'
+                ? 'bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg font-semibold transition-all'
+                : 'text-white/70 hover:text-white transition-colors'
+            }
+          >
+            {btn.text}
+          </a>
+        ))}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button 
+        id="mobileMenuButton"
+        class="lg:hidden text-white p-2"
+        aria-label="Toggle menu"
+      >
+        <i class="bi bi-list text-2xl"></i>
+      </button>
     </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden pt-4 pb-2">
+      <div class="flex flex-col gap-4">
+        {navLinks.map((link: any) => (
+          <a href={link.url} class="text-white/70 hover:text-white transition-colors py-2">
+            {link.label}
+          </a>
+        ))}
+        <div class="border-t border-white/10 pt-4 mt-2">
+          {ctaButtons.map((btn: any) => (
+            <a 
+              href={btn.url}
+              class={
+                btn.style === 'primary'
+                  ? 'block bg-accent-orange hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all text-center mt-2'
+                  : 'block text-white/70 hover:text-white transition-colors py-2'
+              }
+            >
+              {btn.text}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
 </nav>
+
+<script>
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const icon = mobileMenuButton?.querySelector('i');
+
+  mobileMenuButton?.addEventListener('click', () => {
+    const isHidden = mobileMenu?.classList.contains('hidden');
+    
+    if (isHidden) {
+      mobileMenu?.classList.remove('hidden');
+      icon?.classList.remove('bi-list');
+      icon?.classList.add('bi-x');
+    } else {
+      mobileMenu?.classList.add('hidden');
+      icon?.classList.remove('bi-x');
+      icon?.classList.add('bi-list');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('nav') && !mobileMenu?.classList.contains('hidden')) {
+      mobileMenu?.classList.add('hidden');
+      icon?.classList.remove('bi-x');
+      icon?.classList.add('bi-list');
+    }
+  });
+</script>

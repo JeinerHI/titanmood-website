@@ -1,0 +1,70 @@
+---
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+
+// Fetch site settings
+const settingsRes = await fetch(`${API_URL}/site-setting?populate[navbar_logo][populate]=*&populate[footer_columns][populate]=*&populate[footer_legal_links][populate]=*`);
+const settingsData = await settingsRes.json();
+const settings = settingsData.data;
+
+// Sort columns and legal links
+const footerColumns = settings.footer_columns?.sort((a: any, b: any) => a.order - b.order) || [];
+const legalLinks = settings.footer_legal_links?.sort((a: any, b: any) => a.order - b.order) || [];
+
+// Logo URL
+const logoUrl = settings.navbar_logo?.url 
+  ? (import.meta.env.DEV ? `http://localhost:1337${settings.navbar_logo.url}` : settings.navbar_logo.url)
+  : '/logo.webp';
+---
+
+<footer class="bg-bg-navy text-white py-20">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-12 mb-16">
+      <!-- Brand Column -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="relative w-12 h-full bg-black rounded-xl flex items-center justify-center p-0 shadow-strong border border-primary/10">
+            <img 
+              src={logoUrl}
+              alt={`${settings.navbar_brand_text} Logo`}
+              class="w-10 h-full object-contain rounded-xl"
+            />
+          </div>
+          <span class="font-display font-bold text-xl">{settings.navbar_brand_text}</span>
+        </div>
+        <p class="text-white/60 text-sm leading-relaxed">
+          {settings.footer_tagline?.map((block: any) => 
+            block.children?.map((child: any) => child.text).join(' ')
+          ).join(' ') || 'La App fitness que transforma tu entrenamiento. Disponible en iOS y Android.'}
+        </p>
+      </div>
+
+      <!-- Dynamic Columns -->
+      {footerColumns.map((column: any) => (
+        <div>
+          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">{column.title}</h3>
+          <ul class="space-y-3 text-sm">
+            {column.links && column.links.map((link: any) => (
+              <li>
+                <a href={link.url} class="text-white/60 hover:text-white transition-colors">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+      <p class="text-white/60">{settings.footer_copyright}</p>
+      <div class="flex gap-6 text-white/60">
+        {legalLinks.map((link: any) => (
+          <a href={link.url} class="hover:text-white transition-colors">
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>

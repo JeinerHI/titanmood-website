@@ -1,0 +1,179 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { blocksToHtml } from '../../utils/blocksToHtml';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+const { slug } = Astro.params;
+
+// Fetch article by slug
+const articleRes = await fetch(`${API_URL}/articles?filters[slug][$eq]=${slug}&populate=category`);
+const articleData = await articleRes.json();
+const article = articleData.data?.[0];
+
+// 404 if article not found
+if (!article) {
+  return Astro.redirect('/404');
+}
+
+// Helper to format date
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+
+// Calculate reading time
+function calculateReadingTime(content: any[]): number {
+  const wordsPerMinute = 200;
+  const text = content.map((block: any) => 
+    block.children?.map((child: any) => child.text || '').join(' ') || ''
+  ).join(' ');
+  const wordCount = text.split(/\s+/).length;
+  return Math.ceil(wordCount / wordsPerMinute);
+}
+
+// Generate paths for static generation
+export async function getStaticPaths() {
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+  const articlesRes = await fetch(`${API_URL}/articles`);
+  const articlesData = await articlesRes.json();
+  const articles = articlesData.data || [];
+  
+  return articles.map((article: any) => ({
+    params: { slug: article.slug },
+  }));
+}
+---
+
+<Layout 
+  title={article.title}
+  description={article.excerpt}
+>
+  <Navbar />
+  
+  <!-- Article Header -->
+  <article class="pt-32 pb-20">
+    <div class="max-w-4xl mx-auto px-6">
+      <!-- Category & Meta -->
+      <div class="flex items-center gap-4 mb-6 text-sm">
+        {article.category && (
+            <span class="inline-block bg-primary/10 text-primary font-semibold px-4 py-2 rounded-full">
+            {article.category.name}
+            </span>
+        )}
+        <div class="flex items-center gap-4 text-text-secondary">
+          <div class="flex items-center gap-1">
+            <i class="bi bi-calendar3"></i>
+            <span>{formatDate(article.publishedAt)}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <i class="bi bi-clock"></i>
+            <span>{calculateReadingTime(article.content)} min de lectura</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Title -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
+            {article.title}
+        </h1>
+
+        <p class="text-xl text-text-secondary mb-12 leading-relaxed">
+            {article.excerpt}
+        </p>
+      
+      <!-- Divider -->
+      <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent-orange rounded-full mb-12"></div>
+      
+      <!-- Content -->
+      <div class="prose prose-lg max-w-none">
+        <div class="article-content text-text-primary leading-relaxed" set:html={blocksToHtml(article.content)}></div>
+      </div>
+      
+      <!-- Back to blog -->
+      <div class="mt-16 pt-8 border-t border-gray-200">
+        <a 
+          href="/blog"
+          class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
+        >
+          <i class="bi bi-arrow-left"></i>
+          <span>Volver al blog</span>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <Footer />
+</Layout>
+
+<style>
+  .article-content {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+  
+  .article-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: #0f172a;
+  }
+  
+  .article-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+  
+  .article-content p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .article-content ul, .article-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+  }
+  
+  .article-content li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .article-content strong {
+    color: #1349ec;
+    font-weight: 600;
+  }
+  
+  .article-content a {
+    color: #1349ec;
+    text-decoration: underline;
+    transition: color 0.3s;
+  }
+  
+  .article-content a:hover {
+    color: #0f3bc5;
+  }
+  
+  .article-content blockquote {
+    border-left: 4px solid #1349ec;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #64748b;
+  }
+  
+  .article-content code {
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+</style>

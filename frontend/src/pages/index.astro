@@ -1,6 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { blocksToHtml } from '../utils/blocksToHtml';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+
+// Fetch Homepage data (Strapi v5 syntax)
+const homepageRes = await fetch(`${API_URL}/homepage`);
+const homepageData = await homepageRes.json();
+const homepage = homepageData.data;
+
+// Fetch Feature Sections with populated components (Strapi v5 syntax)
+const featuresRes = await fetch(`${API_URL}/feature-sections?populate[feature_items][populate]=*&sort=order:asc`);
+const featuresData = await featuresRes.json();
+const features = featuresData.data;
+
+// Fetch Pricing Features
+const pricingRes = await fetch(`${API_URL}/pricing-features?sort=order:asc`);
+const pricingData = await pricingRes.json();
+const pricingFeatures = pricingData.data;
+
+// Debug logs (puedes comentarlos después)
+console.log('Homepage:', homepage);
+console.log('Features:', features);
+console.log('Pricing:', pricingFeatures);
 ---
 
 <Layout title="Inicio">
@@ -8,350 +32,156 @@ import Navbar from '../components/Navbar.astro';
   
   <!-- Hero Section -->
   <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <!-- Background Image Overlay -->
     <div class="absolute inset-0 bg-gradient-to-br from-bg-navy via-[#1a1f35] to-bg-navy"></div>
-    
-    <!-- Pattern overlay -->
     <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
     
-    <!-- Glow effects -->
     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-[120px]"></div>
     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-orange/20 rounded-full blur-[120px]"></div>
     
-    <!-- Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
-      <!-- Badge -->
       <div class="inline-block bg-gradient-to-r from-accent-orange/20 to-accent-orange/10 border border-accent-orange/30 rounded-full px-5 py-2 mb-8 backdrop-blur-sm">
-        <span class="text-accent-orange font-semibold text-sm">TitanMood Pro</span>
+        <span class="text-accent-orange font-semibold text-sm">{homepage.hero_badge}</span>
       </div>
       
-      <!-- Main Title -->
       <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-[1.1]">
-        Lo Mejor de TitanMood.
-        <span class="block mt-2">
-          <span class="text-accent-orange">Hecho Para</span> Tus Metas.
-        </span>
+        <div set:html={blocksToHtml(homepage.hero_title)}></div>
       </h1>
       
-      <!-- Subtitle -->
       <p class="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed">
-        Entrenamiento más inteligente, progreso constante<br class="hidden md:block"/> y exploración sin límites.
+        {homepage.hero_subtitle}
       </p>
       
-      <!-- CTAs -->
       <div class="flex gap-4 justify-center flex-wrap mb-20">
-        <a href="#cta" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-accent-orange to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,107,53,0.5)] overflow-hidden">
+        <a href="/en-desarrollo" class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-accent-orange to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,107,53,0.5)] overflow-hidden">
           <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></span>
-          <span class="relative">Prueba TitanMood Pro</span>
+          <span class="relative">{homepage.hero_cta_primary}</span>
         </a>
         <a href="#entrena" class="inline-flex items-center gap-3 bg-white/5 border-2 border-white/20 text-white px-8 py-4 rounded-xl font-bold text-lg backdrop-blur-sm hover:bg-white/10 hover:border-white/30 transition-all duration-300">
-          <span>Ver Demo</span>
+          <span>{homepage.hero_cta_secondary}</span>
         </a>
       </div>
       
-      <!-- Section subtitle -->
       <div class="mb-8">
         <p class="text-white/60 text-lg mb-6">
           Todo lo que necesitas, <span class="text-primary font-semibold">en un solo lugar</span>
         </p>
       </div>
       
-      <!-- Tab navigation -->
       <div class="inline-flex bg-white/5 backdrop-blur-sm rounded-xl p-2 border border-white/10">
-        <button onclick="showTab('entrena')" id="tab-entrena" class="tab-button px-6 py-3 rounded-lg text-white font-semibold transition-all bg-primary">
-          Entrena
-        </button>
-        <button onclick="showTab('explora')" id="tab-explora" class="tab-button px-6 py-3 rounded-lg text-white/60 font-semibold transition-all hover:text-white hover:bg-white/5">
-          Explora
-        </button>
-        <button onclick="showTab('compite')" id="tab-compite" class="tab-button px-6 py-3 rounded-lg text-white/60 font-semibold transition-all hover:text-white hover:bg-white/5">
-          Compite
-        </button>
+        {features.map((feature: any, index: number) => (
+          <button 
+            onclick={`showTab('${feature.tab_name}')`}
+            id={`tab-${feature.tab_name}`}
+            class={`tab-button px-6 py-3 rounded-lg font-semibold transition-all ${index === 0 ? 'bg-primary text-white' : 'text-white/60 bg-transparent'}`}
+          >
+            {feature.tab_name.charAt(0).toUpperCase() + feature.tab_name.slice(1)}
+          </button>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- Entrena Section -->
-  <section id="entrena-content" class="tab-content relative py-32 overflow-hidden">
-    <!-- Dark background with overlay -->
-    <div class="absolute inset-0 bg-gradient-to-br from-[#1a1f35] via-bg-navy to-[#1a1f35]"></div>
-    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    
-    <div class="relative z-10 max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <!-- Content -->
-        <div>
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 leading-tight">
-            Mejora Más Rápido Con
-            <span class="block text-accent-orange">Entrenamiento Inteligente</span>
-          </h2>
-          <p class="text-xl text-white/70 mb-12 leading-relaxed">
-            Cada objetivo que estableces y cada esfuerzo que registras te ayuda a entender tu rendimiento y alcanzar nuevas marcas personales.
-          </p>
-          
-          <!-- Features -->
-          <div class="space-y-8">
-            <!-- Feature 1 -->
-            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">📊</span>
-                </div>
-                <div>
-                  <div class="inline-block bg-primary/20 text-primary font-semibold px-3 py-1 rounded-full text-xs mb-2">
-                    RPE
+  <!-- Feature Sections (Dynamic) -->
+  {features.map((feature: any, index: number) => (
+    <section 
+      id={`${feature.tab_name}-content`}
+      class={`tab-content relative py-32 overflow-hidden ${index !== 0 ? 'hidden' : ''} ${index % 2 === 0 ? 'bg-gradient-to-br from-[#1a1f35] via-bg-navy to-[#1a1f35]' : 'bg-white'}`}
+    >
+      {index % 2 === 0 && (
+        <>
+          <div class="absolute inset-0 bg-gradient-to-br from-[#1a1f35] via-bg-navy to-[#1a1f35]"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </>
+      )}
+      
+      <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class={`grid lg:grid-cols-2 gap-16 items-center ${index === 1 ? '' : ''}`}>
+          {/* Content */}
+          <div class={index === 1 ? 'order-1 lg:order-2' : ''}>
+            <h2 class={`text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight ${index % 2 === 0 ? 'text-white' : 'text-gray-900'}`}>
+              <div set:html={blocksToHtml(feature.title)}></div>
+            </h2>
+            <p class={`text-xl mb-12 leading-relaxed ${index % 2 === 0 ? 'text-white/70' : 'text-text-secondary'}`}>
+              {feature.subtitle}
+            </p>
+            
+            <div class="space-y-8">
+              {feature.feature_items.map((item: any) => (
+                <div class={`${index % 2 === 0 ? 'bg-white/5 backdrop-blur-sm border border-white/10' : 'bg-bg-light border border-gray-200'} rounded-2xl p-6 hover:${index % 2 === 0 ? 'bg-white/10' : 'shadow-lg'} transition-all`}>
+                  <div class="flex items-start gap-4">
+                    <div class={`w-12 h-12 bg-gradient-to-br ${
+                      item.badge_color === 'primary' ? 'from-primary to-primary-dark' :
+                      item.badge_color === 'success' ? 'from-accent-success to-emerald-600' :
+                      item.badge_color === 'orange' ? 'from-accent-orange to-orange-600' :
+                      'from-accent-warning to-yellow-600'
+                    } rounded-xl flex items-center justify-center flex-shrink-0`}>
+                      <i class={`bi bi-${item.icon} text-2xl text-white`}></i>
+                    </div>
+                    <div>
+                      <div class={`inline-block ${
+                        item.badge_color === 'primary' ? 'bg-primary/20 text-primary' :
+                        item.badge_color === 'success' ? 'bg-accent-success/20 text-accent-success' :
+                        item.badge_color === 'orange' ? 'bg-accent-orange/20 text-accent-orange' :
+                        'bg-accent-warning/20 text-accent-warning'
+                      } font-semibold px-3 py-1 rounded-full text-xs mb-2`}>
+                        {item.badge}
+                      </div>
+                      <h3 class={`text-xl font-bold mb-2 ${index % 2 === 0 ? 'text-white' : 'text-gray-900'}`}>
+                        {item.title}
+                      </h3>
+                      <p class={`leading-relaxed ${index % 2 === 0 ? 'text-white/60' : 'text-text-secondary'}`}>
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                  <h3 class="text-xl font-bold text-white mb-2">Registra Tu Esfuerzo</h3>
-                  <p class="text-white/60 leading-relaxed">
-                    Sistema RPE para trackear la intensidad de cada serie y optimizar tu entrenamiento.
-                  </p>
                 </div>
-              </div>
+              ))}
             </div>
             
-            <!-- Feature 2 -->
-            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-accent-success to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">📈</span>
-                </div>
-                <div>
-                  <div class="inline-block bg-accent-success/20 text-accent-success font-semibold px-3 py-1 rounded-full text-xs mb-2">
-                    Nuevo
-                  </div>
-                  <h3 class="text-xl font-bold text-white mb-2">Compara Tu Progreso</h3>
-                  <p class="text-white/60 leading-relaxed">
-                    Visualiza tu evolución semana a semana con gráficos claros y detallados.
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Feature 3 -->
-            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-accent-orange to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">💡</span>
-                </div>
-                <div>
-                  <div class="inline-block bg-accent-orange/20 text-accent-orange font-semibold px-3 py-1 rounded-full text-xs mb-2">
-                    Analíticas
-                  </div>
-                  <h3 class="text-xl font-bold text-white mb-2">Datos Accionables</h3>
-                  <p class="text-white/60 leading-relaxed">
-                    Convierte tus números en recomendaciones prácticas para mejorar.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <a href="/en-desarrollo" class={`inline-flex items-center gap-2 font-bold text-lg mt-10 hover:gap-4 transition-all group ${index % 2 === 0 ? 'text-accent-orange' : 'text-primary'}`}>
+              <span>{feature.cta_text}</span>
+              <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
           </div>
           
-          <a href="#cta" class="inline-flex items-center gap-2 text-accent-orange font-bold text-lg mt-10 hover:gap-4 transition-all group">
-            <span>Empezar a Entrenar</span>
-            <span class="group-hover:translate-x-1 transition-transform">→</span>
-          </a>
-        </div>
-        
-        <!-- Mock iPhone -->
-        <div class="relative">
-          <div class="relative mx-auto w-full max-w-sm">
-            <!-- Phone mockup -->
-            <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
-              <!-- Notch -->
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl"></div>
+          {/* Mock iPhone */}
+          <div class={`relative ${index === 1 ? 'order-2 lg:order-1' : ''}`}>
+            <div class="relative mx-auto w-full max-w-sm">
+              <!-- iPhone frame -->
+              <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
+                <!-- Notch -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-10"></div>
+                
+                <!-- Screen content -->
+                <div class="relative w-full h-full rounded-[2.5rem] overflow-hidden bg-surface-navy">
+                  <img 
+                    src={`/app-${feature.tab_name}.png`}
+                    alt={`TitanMood - ${feature.tab_name.charAt(0).toUpperCase() + feature.tab_name.slice(1)}`}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
               
-              <!-- Screen -->
-              <div class="relative w-full h-full bg-gradient-to-br from-primary/20 to-accent-orange/20 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
-                <div class="text-center p-8">
-                  <div class="text-6xl mb-4">📊</div>
-                  <p class="text-white/80 text-sm">Dashboard de analíticas</p>
-                </div>
-              </div>
+              <!-- Glow effect -->
+              <div class={`absolute inset-0 ${
+                feature.tab_name === 'entrena' ? 'bg-gradient-to-br from-primary/30 to-accent-orange/30' :
+                feature.tab_name === 'explora' ? 'bg-gradient-to-br from-primary/30 to-accent-success/30' :
+                'bg-gradient-to-br from-accent-warning/30 to-accent-orange/30'
+              } rounded-[3rem] blur-3xl -z-10`}></div>
             </div>
-            
-            <!-- Glow effect -->
-            <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent-orange/30 rounded-[3rem] blur-3xl -z-10"></div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  ))}
 
-  <!-- Explora Section -->
-  <section id="explora-content" class="tab-content hidden py-32 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <!-- Mock iPhone -->
-        <div class="relative order-2 lg:order-1">
-          <div class="relative mx-auto w-full max-w-sm">
-            <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl"></div>
-              <div class="relative w-full h-full bg-gradient-to-br from-primary/20 to-accent-success/20 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
-                <div class="text-center p-8">
-                  <div class="text-6xl mb-4">💪</div>
-                  <p class="text-white/80 text-sm">Biblioteca de ejercicios</p>
-                </div>
-              </div>
-            </div>
-            <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent-success/30 rounded-[3rem] blur-3xl -z-10"></div>
-          </div>
-        </div>
-        
-        <!-- Content -->
-        <div class="order-1 lg:order-2">
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
-            Explora Con
-            <span class="block text-primary">Confianza</span>
-          </h2>
-          <p class="text-xl text-text-secondary mb-12 leading-relaxed">
-            Descubre nuevos ejercicios y despega sin adivinar. Mejor planificación y entrenamientos más efectivos.
-          </p>
-          
-          <div class="space-y-8">
-            <div class="bg-bg-light border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">📚</span>
-                </div>
-                <div>
-                  <div class="inline-block bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full text-xs mb-2">
-                    Biblioteca
-                  </div>
-                  <h3 class="text-xl font-bold mb-2">+200 Ejercicios</h3>
-                  <p class="text-text-secondary leading-relaxed">
-                    Amplia biblioteca con instrucciones, variaciones y alternativas para cada grupo muscular.
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="bg-bg-light border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-accent-success to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">📊</span>
-                </div>
-                <div>
-                  <div class="inline-block bg-accent-success/10 text-accent-success font-semibold px-3 py-1 rounded-full text-xs mb-2">
-                    Datos
-                  </div>
-                  <h3 class="text-xl font-bold mb-2">Planifica Con Datos</h3>
-                  <p class="text-text-secondary leading-relaxed">
-                    Historial completo con métricas avanzadas. Visualiza volumen y zonas de mejora.
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="bg-bg-light border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-accent-orange to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">🔄</span>
-                </div>
-                <div>
-                  <div class="inline-block bg-accent-orange/10 text-accent-orange font-semibold px-3 py-1 rounded-full text-xs mb-2">
-                    Flexibilidad
-                  </div>
-                  <h3 class="text-xl font-bold mb-2">Agrega Variaciones</h3>
-                  <p class="text-text-secondary leading-relaxed">
-                    Incluye movilidad, accesorios o finishers para complementar tu rutina.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <a href="#cta" class="inline-flex items-center gap-2 text-primary font-bold text-lg mt-10 hover:gap-4 transition-all group">
-            <span>Explorar Ejercicios</span>
-            <span class="group-hover:translate-x-1 transition-transform">→</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Compite Section -->
-  <section id="compite-content" class="tab-content hidden relative py-32 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-[#1a1f35] via-bg-navy to-[#1a1f35]"></div>
-    
-    <div class="relative z-10 max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 leading-tight">
-            Saca Lo Mejor De Ti Con
-            <span class="block text-accent-orange">Desafíos</span>
-          </h2>
-          <p class="text-xl text-white/70 mb-12 leading-relaxed">
-            Persigue marcas personales, compite con amigos o gana tu lugar en el ranking global.
-          </p>
-          
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <div class="w-14 h-14 bg-gradient-to-br from-accent-warning to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-3xl">🏆</span>
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-white mb-2">Sistema de Logros</h3>
-                <p class="text-white/60 leading-relaxed">
-                  Desbloquea badges al completar hitos: primera sesión, 10 entrenamientos, nuevos PRs.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-4">
-              <div class="w-14 h-14 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-3xl">👥</span>
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-white mb-2">Comparte Con Amigos</h3>
-                <p class="text-white/60 leading-relaxed">
-                  Convierte la motivación en competencia amistosa. Comparte logros y progreso.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-4">
-              <div class="w-14 h-14 bg-gradient-to-br from-accent-orange to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span class="text-3xl">⭐</span>
-              </div>
-              <div>
-                <h3 class="text-xl font-bold text-white mb-2">Marcas Personales</h3>
-                <p class="text-white/60 leading-relaxed">
-                  Registra y celebra cada PR. Trackea sentadilla, press banca y peso muerto.
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <a href="#cta" class="inline-flex items-center gap-2 text-accent-orange font-bold text-lg mt-10 hover:gap-4 transition-all group">
-            <span>Empezar a Competir</span>
-            <span class="group-hover:translate-x-1 transition-transform">→</span>
-          </a>
-        </div>
-        
-        <div class="relative">
-          <div class="relative mx-auto w-full max-w-sm">
-            <div class="relative aspect-[9/19] bg-gradient-to-br from-surface-navy to-bg-navy rounded-[3rem] p-3 shadow-2xl border-8 border-gray-800">
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl"></div>
-              <div class="relative w-full h-full bg-gradient-to-br from-accent-warning/20 to-accent-orange/20 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
-                <div class="text-center p-8">
-                  <div class="text-6xl mb-4">🎯</div>
-                  <p class="text-white/80 text-sm">Sistema de logros</p>
-                </div>
-              </div>
-            </div>
-            <div class="absolute inset-0 bg-gradient-to-br from-accent-warning/30 to-accent-orange/30 rounded-[3rem] blur-3xl -z-10"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing Table -->
+  <!-- Pricing Table (Dynamic) -->
   <section id="precios" class="py-32 bg-white">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-16">
         <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
-          Y Con Todo, Nos Referimos A <span class="text-primary">Todo</span>
+          <div set:html={homepage.pricing_title}></div>
         </h2>
       </div>
       
@@ -366,176 +196,130 @@ import Navbar from '../components/Navbar.astro';
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Registra tus actividades</td>
-                <td class="p-4 text-center"><span class="text-accent-success text-2xl">✓</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Conecta con la comunidad</td>
-                <td class="p-4 text-center"><span class="text-accent-success text-2xl">✓</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Tracking RPE por serie</td>
-                <td class="p-4 text-center"><span class="text-accent-success text-2xl">✓</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Analíticas avanzadas</td>
-                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Historial completo</td>
-                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Biblioteca de +200 ejercicios</td>
-                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
-              <tr class="hover:bg-bg-light transition-colors">
-                <td class="p-4 font-medium">Sistema de logros</td>
-                <td class="p-4 text-center"><span class="text-text-dim text-xl">—</span></td>
-                <td class="p-4 text-center bg-primary/5"><span class="text-accent-success text-2xl">✓</span></td>
-              </tr>
+              {pricingFeatures.map((feature: any) => (
+                <tr class="hover:bg-bg-light transition-colors">
+                  <td class="p-4 font-medium">{feature.name}</td>
+                  <td class="p-4 text-center">
+                    {feature.free_tier ? (
+                      <span class="text-accent-success text-2xl">✓</span>
+                    ) : (
+                      <span class="text-text-dim text-xl">—</span>
+                    )}
+                  </td>
+                  <td class="p-4 text-center bg-primary/5">
+                    {feature.pro_tier ? (
+                      <span class="text-accent-success text-2xl">✓</span>
+                    ) : (
+                      <span class="text-text-dim text-xl">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </div>
       
       <p class="text-center text-text-secondary mt-8 text-sm">
-        Cada día, usuarios alcanzan sus metas con TitanMood.
+        {homepage.pricing_subtitle}
       </p>
     </div>
   </section>
 
-  <!-- Final CTA -->
+  <!-- Final CTA (Dynamic) -->
   <section id="cta" class="relative py-40 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-br from-bg-navy via-[#1a1f35] to-bg-navy"></div>
     <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px]"></div>
     <div class="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-accent-orange/15 rounded-full blur-[150px]"></div>
     
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-      <p class="text-accent-orange font-bold mb-6 text-lg">Cada día, usuarios alcanzan sus metas</p>
+      <p class="text-accent-orange font-bold mb-6 text-lg">{homepage.final_cta_text}</p>
       <h2 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-16 leading-tight">
-        Bienvenido Al Club.
+        <div set:html={blocksToHtml(homepage.final_cta_title)}></div>
       </h2>
       
       <div class="flex gap-5 justify-center flex-wrap mb-20">
-        <a href="#" class="group inline-flex items-center gap-3 bg-white text-bg-navy px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all shadow-strong">
-          <span class="text-2xl">🍎</span>
+        <a href="/en-desarrollo" class="group inline-flex items-center gap-3 bg-white text-bg-navy px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all shadow-strong">
+          <i class="bi bi-apple text-2xl"></i>
           <span>App Store</span>
         </a>
-        <a href="#" class="group inline-flex items-center gap-3 bg-gradient-to-r from-accent-success to-emerald-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all shadow-strong">
-          <span class="text-2xl">🤖</span>
+        <a href="/en-desarrollo" class="group inline-flex items-center gap-3 bg-gradient-to-r from-accent-success to-emerald-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:scale-105 transition-all shadow-strong">
+          <i class="bi bi-google-play text-2xl"></i>
           <span>Google Play</span>
         </a>
       </div>
       
       <div class="grid grid-cols-3 gap-12 max-w-2xl mx-auto pt-12 border-t border-white/10">
         <div>
-          <div class="text-5xl font-bold text-white mb-2">4.9</div>
-          <div class="text-white/60 text-sm">Rating</div>
+          <div class="text-5xl font-bold text-white mb-2">{homepage.stat_rating}</div>
+          <div class="text-white/60 text-sm">{homepage.stat_rating_label}</div>
         </div>
         <div>
-          <div class="text-5xl font-bold text-white mb-2">10K+</div>
-          <div class="text-white/60 text-sm">Descargas</div>
+          <div class="text-5xl font-bold text-white mb-2">{homepage.stat_downloads}</div>
+          <div class="text-white/60 text-sm">{homepage.stat_downloads_label}</div>
         </div>
         <div>
-          <div class="text-5xl font-bold text-white mb-2">2K+</div>
-          <div class="text-white/60 text-sm">Reseñas</div>
+          <div class="text-5xl font-bold text-white mb-2">{homepage.stat_reviews}</div>
+          <div class="text-white/60 text-sm">{homepage.stat_reviews_label}</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-bg-navy text-white py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-12 mb-16">
-        <div>
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent-orange rounded-lg flex items-center justify-center font-bold text-white">
-              TM
-            </div>
-            <span class="font-display font-bold text-xl">TitanMood</span>
-          </div>
-          <p class="text-white/60 text-sm leading-relaxed">
-            La app fitness que transforma tu entrenamiento. Disponible en iOS y Android.
-          </p>
-        </div>
-        
-        <div>
-          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">Producto</h3>
-          <ul class="space-y-3 text-sm">
-            <li><a href="#precios" class="text-white/60 hover:text-white transition-colors">Suscripción</a></li>
-            <li><a href="#explora" class="text-white/60 hover:text-white transition-colors">Ejercicios</a></li>
-            <li><a href="#compite" class="text-white/60 hover:text-white transition-colors">Desafíos</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">Comunidad</h3>
-          <ul class="space-y-3 text-sm">
-            <li><a href="/blog" class="text-white/60 hover:text-white transition-colors">Blog</a></li>
-            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Eventos</a></li>
-            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Historias</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h3 class="font-bold mb-4 text-sm uppercase tracking-wider">Recursos</h3>
-          <ul class="space-y-3 text-sm">
-            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Ayuda</a></li>
-            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Contacto</a></li>
-            <li><a href="#" class="text-white/60 hover:text-white transition-colors">Privacidad</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-        <p class="text-white/60">© 2026 TitanMood. Todos los derechos reservados.</p>
-        <div class="flex gap-6 text-white/60">
-          <a href="#" class="hover:text-white transition-colors">Privacidad</a>
-          <a href="#" class="hover:text-white transition-colors">Términos</a>
-          <a href="#" class="hover:text-white transition-colors">Cookies</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <Footer />
+
+
 
   <!-- Tab Script -->
   <script>
-    function showTab(tabName: string): void {
+    function showTab(tabName: string, shouldScroll: boolean = true): void {
+      // Hide all content
       document.querySelectorAll('.tab-content').forEach(el => {
         el.classList.add('hidden');
       });
       
+      // Reset all buttons to inactive state
       document.querySelectorAll('.tab-button').forEach(el => {
         el.classList.remove('bg-primary', 'text-white');
-        el.classList.add('text-white/60');
+        el.classList.add('text-white/60', 'bg-transparent');
       });
       
+      // Show selected content
       const content = document.getElementById(tabName + '-content');
       if (content) {
         content.classList.remove('hidden');
-        content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Only scroll if explicitly requested (not on initial load)
+        if (shouldScroll) {
+          content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
       
+      // Activate selected button
       const button = document.getElementById('tab-' + tabName);
       if (button) {
         button.classList.add('bg-primary', 'text-white');
-        button.classList.remove('text-white/60');
+        button.classList.remove('text-white/60', 'bg-transparent');
       }
     }
     
     (window as any).showTab = showTab;
     
+    // Initialize first tab WITHOUT scrolling on page load
     document.addEventListener('DOMContentLoaded', () => {
-      showTab('entrena');
+      showTab('entrena', false); // false = no scroll
     });
   </script>
+  <style>
+    .tab-button:not(.bg-primary):hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .tab-button.bg-primary:hover {
+      background-color: #0f3bc5; /* primary-dark */
+      transform: scale(1.02);
+    }
+  </style>
 </Layout>

@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+
+// Fetch all training methods
+const methodsRes = await fetch(`${API_URL}/training-methods?sort=title:asc`);
+const methodsData = await methodsRes.json();
+const methods = methodsData.data || [];
+
+// Debug
+console.log('Training Methods API response:', JSON.stringify(methodsData, null, 2));
+---
+
+<Layout title="Métodos de Entrenamiento">
+  <Navbar />
+  
+  <!-- Hero Section -->
+  <section class="relative py-32 overflow-hidden bg-gradient-to-br from-bg-navy via-surface-navy to-bg-navy">
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6">
+        Métodos de <span class="text-primary">Entrenamiento</span>
+      </h1>
+      <p class="text-xl text-white/70 max-w-3xl mx-auto">
+        Descubre diferentes enfoques y metodologías para optimizar tus resultados
+      </p>
+    </div>
+  </section>
+
+  <!-- Methods Grid -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      {methods.length === 0 ? (
+        <div class="text-center py-20">
+          <i class="bi bi-diagram-3 text-6xl text-text-secondary mb-4"></i>
+          <p class="text-xl text-text-secondary">No hay métodos de entrenamiento disponibles aún.</p>
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 gap-8">
+            {methods.map((method: any) => (
+            <article class="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-strong transition-all duration-300">
+                <!-- Method header -->
+                <div class="bg-gradient-to-br from-primary to-primary-dark p-8 text-white">
+                <h2 class="text-3xl font-display font-bold">
+                    {method.title}
+                </h2>
+                </div>
+                
+                <!-- Method content -->
+                <div class="p-8">
+                {method.description && (
+                    <div class="mb-6">
+                    <h3 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        Descripción
+                    </h3>
+                    <div class="text-text-secondary leading-relaxed">
+                        {method.description.map((block: any) => 
+                        block.children?.map((child: any) => child.text).join(' ')
+                        ).join(' ')}
+                    </div>
+                    </div>
+                )}
+                
+                {/* Benefits */}
+                {method.benefits && (
+                    <div>
+                    <h3 class="text-lg font-bold text-text-primary mb-3 flex items-center gap-2">
+                        <i class="bi bi-check-circle text-accent-success"></i>
+                        Beneficios
+                    </h3>
+                    <ul class="space-y-2">
+                        {method.benefits.map((block: any) => {
+                        const text = block.children?.map((child: any) => child.text).join('').trim();
+                        if (text && text.startsWith('-')) {
+                            return (
+                            <li class="flex items-start gap-2 text-text-secondary">
+                                <i class="bi bi-arrow-right text-primary mt-1"></i>
+                                <span>{text.substring(1).trim()}</span>
+                            </li>
+                            );
+                        }
+                        return null;
+                        })}
+                    </ul>
+                    </div>
+                )}
+                </div>
+            </article>
+            ))}
+
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

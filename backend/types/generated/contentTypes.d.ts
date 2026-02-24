@@ -499,6 +499,164 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiContactPageContactPage extends Struct.SingleTypeSchema {
+  collectionName: 'contact_pages';
+  info: {
+    displayName: 'Contact Page';
+    pluralName: 'contact-pages';
+    singularName: 'contact-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    contact_info_cards: Schema.Attribute.Component<
+      'contact.contact-info-card',
+      true
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    form_title: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Env\u00EDanos un mensaje'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-page.contact-page'
+    > &
+      Schema.Attribute.Private;
+    page_subtitle: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<'\u00BFTienes preguntas? Estamos aqu\u00ED para ayudarte'>;
+    page_title: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Cont\u00E1ctanos'>;
+    publishedAt: Schema.Attribute.DateTime;
+    subject_options: Schema.Attribute.Component<
+      'contact.form-subject-option',
+      true
+    >;
+    success_message_text: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Te responderemos pronto'>;
+    success_message_title: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'\u00A1Mensaje enviado!'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiContactSubmissionContactSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_submissions';
+  info: {
+    displayName: 'Contact Submission';
+    pluralName: 'contact-submissions';
+    singularName: 'contact-submission';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submission.contact-submission'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    state: Schema.Attribute.Enumeration<
+      ['new', 'read', 'replied', 'archieved']
+    > &
+      Schema.Attribute.DefaultTo<'new'>;
+    subject: Schema.Attribute.String;
+    submitted_at: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiFeatureSectionFeatureSection
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'feature_sections';
+  info: {
+    displayName: 'Feature Section';
+    pluralName: 'feature-sections';
+    singularName: 'feature-section';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    cta_text: Schema.Attribute.String;
+    feature_items: Schema.Attribute.Component<'shared.feature-items', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::feature-section.feature-section'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    subtitle: Schema.Attribute.Text;
+    tab_name: Schema.Attribute.Enumeration<['entrena', 'explora', 'compite']>;
+    title: Schema.Attribute.Blocks;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
+  collectionName: 'homepages';
+  info: {
+    displayName: 'Homepage';
+    pluralName: 'homepages';
+    singularName: 'homepage';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    final_cta_text: Schema.Attribute.Text;
+    final_cta_title: Schema.Attribute.Blocks;
+    hero_badge: Schema.Attribute.String;
+    hero_cta_primary: Schema.Attribute.String;
+    hero_cta_secondary: Schema.Attribute.String;
+    hero_subtitle: Schema.Attribute.Text;
+    hero_title: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::homepage.homepage'
+    > &
+      Schema.Attribute.Private;
+    pricing_subtitle: Schema.Attribute.Text;
+    pricing_title: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    stat_downloads: Schema.Attribute.String;
+    stat_downloads_label: Schema.Attribute.String;
+    stat_rating: Schema.Attribute.String;
+    stat_rating_label: Schema.Attribute.String;
+    stat_reviews: Schema.Attribute.String;
+    stat_reviews_label: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPagePage extends Struct.SingleTypeSchema {
   collectionName: 'pages';
   info: {
@@ -521,6 +679,84 @@ export interface ApiPagePage extends Struct.SingleTypeSchema {
     seo_meta: Schema.Attribute.Component<'shared.seo', false>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPricingFeaturePricingFeature
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'pricing_features';
+  info: {
+    displayName: 'Pricing Feature';
+    pluralName: 'pricing-features';
+    singularName: 'pricing-feature';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    free_tier: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pricing-feature.pricing-feature'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer;
+    pro_tier: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSiteSettingSiteSetting extends Struct.SingleTypeSchema {
+  collectionName: 'site_settings';
+  info: {
+    displayName: 'Site Settings';
+    pluralName: 'site-settings';
+    singularName: 'site-setting';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    footer_columns: Schema.Attribute.Component<'footer.footer-column', true>;
+    footer_copyright: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'\u00A9 2026 TitanMood. Todos los derechos reservados.'>;
+    footer_legal_links: Schema.Attribute.Component<
+      'navigation.navigation-link',
+      true
+    >;
+    footer_tagline: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::site-setting.site-setting'
+    > &
+      Schema.Attribute.Private;
+    navbar_brand_text: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'TitanMood'>;
+    navbar_cta_buttons: Schema.Attribute.Component<
+      'navigation.cta-button',
+      true
+    >;
+    navbar_links: Schema.Attribute.Component<
+      'navigation.navigation-link',
+      true
+    >;
+    navbar_logo: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1107,7 +1343,13 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::article.article': ApiArticleArticle;
       'api::category.category': ApiCategoryCategory;
+      'api::contact-page.contact-page': ApiContactPageContactPage;
+      'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
+      'api::feature-section.feature-section': ApiFeatureSectionFeatureSection;
+      'api::homepage.homepage': ApiHomepageHomepage;
       'api::page.page': ApiPagePage;
+      'api::pricing-feature.pricing-feature': ApiPricingFeaturePricingFeature;
+      'api::site-setting.site-setting': ApiSiteSettingSiteSetting;
       'api::trainer.trainer': ApiTrainerTrainer;
       'api::training-method.training-method': ApiTrainingMethodTrainingMethod;
       'plugin::content-releases.release': PluginContentReleasesRelease;

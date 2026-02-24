@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_footer_footer_columns",
+  "info": {
+    "displayName": "Footer Column"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "links": {
+      "type": "json"
+    },
+    "order": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

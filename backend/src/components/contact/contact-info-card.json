@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_contact_contact_info_cards",
+  "info": {
+    "displayName": "Contact Info Card"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "icon_color": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "success",
+        "orange",
+        "warning"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "order": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,133 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
+
+// Fetch all articles (sin populate de seo que no existe)
+const articlesRes = await fetch(`${API_URL}/articles?populate=category&sort=publishedAt:desc`);
+const articlesData = await articlesRes.json();
+const articles = articlesData.data || [];
+
+// Debug: ver qué devuelve la API
+console.log('Articles API response:', JSON.stringify(articlesData, null, 2));
+
+// Verificar si hay error
+if (articlesData.error) {
+  console.error('API Error:', articlesData.error);
+}
+
+// Helper function to calculate reading time
+function calculateReadingTime(content: any[]): number {
+    const wordsPerMinute = 200;
+    // content es un array de blocks, extraer el texto
+    const text = content.map((block: any) => 
+    block.children?.map((child: any) => child.text || '').join(' ') || ''
+    ).join(' ');
+    const wordCount = text.split(/\s+/).length;
+    return Math.ceil(wordCount / wordsPerMinute);
+}
+
+// Helper to format date
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+---
+
+<Layout title="Blog">
+  <Navbar />
+  
+  <!-- Hero Section -->
+  <section class="relative py-32 overflow-hidden bg-gradient-to-br from-bg-navy via-surface-navy to-bg-navy">
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6">
+        Blog <span class="text-primary">TitanMood</span>
+      </h1>
+      <p class="text-xl text-white/70 max-w-3xl mx-auto">
+        Consejos, guías y recursos para maximizar tu entrenamiento
+      </p>
+    </div>
+  </section>
+
+  <!-- Articles Grid -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      {articles.length === 0 ? (
+        <div class="text-center py-20">
+          <i class="bi bi-inbox text-6xl text-text-secondary mb-4"></i>
+          <p class="text-xl text-text-secondary">No hay artículos publicados aún.</p>
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {articles.map((article: any) => (
+            <article class="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-strong transition-all duration-300">
+              <!-- Category badge -->
+              {article.category && (
+                <div class="p-4 pb-0">
+                    <span class="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
+                        {article.category.name}
+                    </span>
+                </div>
+              )}
+              
+              <!-- Article content -->
+              <div class="p-6">
+                <h2 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                <a href={`/blog/${article.slug}`}>
+                    {article.title}
+                </a>
+                </h2>
+
+                <p class="text-text-secondary mb-4 line-clamp-3">
+                {article.excerpt}
+                </p>
+                
+                <!-- Meta info -->
+                <div class="flex items-center gap-4 text-sm text-text-secondary">
+                  <div class="flex items-center gap-1">
+                    <i class="bi bi-calendar3"></i>
+                    <span>{formatDate(article.publishedAt)}</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <i class="bi bi-clock"></i>
+                    <span>{calculateReadingTime(article.content)} min</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Read more -->
+              <div class="px-6 pb-6">
+                <a 
+                  href={`/blog/${article.slug}`}
+                  class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
+                >
+                  <span>Leer más</span>
+                  <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

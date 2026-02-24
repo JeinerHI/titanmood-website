@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pricing_features",
+  "info": {
+    "singularName": "pricing-feature",
+    "pluralName": "pricing-features",
+    "displayName": "Pricing Feature"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "free_tier": {
+      "type": "boolean",
+      "default": false
+    },
+    "pro_tier": {
+      "type": "boolean",
+      "default": true
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}

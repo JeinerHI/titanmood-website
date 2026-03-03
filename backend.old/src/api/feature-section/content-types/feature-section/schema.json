@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "feature_sections",
+  "info": {
+    "singularName": "feature-section",
+    "pluralName": "feature-sections",
+    "displayName": "Feature Section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tab_name": {
+      "type": "enumeration",
+      "enum": [
+        "entrena",
+        "explora",
+        "compite"
+      ]
+    },
+    "title": {
+      "type": "blocks"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "cta_text": {
+      "type": "string"
+    },
+    "order": {
+      "type": "integer"
+    },
+    "feature_items": {
+      "type": "component",
+      "component": "shared.feature-items",
+      "repeatable": true
+    }
+  }
+}

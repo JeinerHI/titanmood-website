@@ -1,0 +1,53 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "navbar_brand_text": {
+      "type": "string",
+      "default": "TitanMood"
+    },
+    "navbar_logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "navbar_links": {
+      "type": "component",
+      "component": "navigation.navigation-link",
+      "repeatable": true
+    },
+    "navbar_cta_buttons": {
+      "type": "component",
+      "component": "navigation.cta-button",
+      "repeatable": true
+    },
+    "footer_tagline": {
+      "type": "blocks"
+    },
+    "footer_columns": {
+      "type": "component",
+      "component": "footer.footer-column",
+      "repeatable": true
+    },
+    "footer_copyright": {
+      "type": "string",
+      "default": "© 2026 TitanMood. Todos los derechos reservados."
+    },
+    "footer_legal_links": {
+      "type": "component",
+      "component": "navigation.navigation-link",
+      "repeatable": true
+    }
+  }
+}

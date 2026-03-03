@@ -481,7 +481,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    decription: Schema.Attribute.Text;
+    description: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -570,7 +570,7 @@ export interface ApiContactSubmissionContactSubmission
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     state: Schema.Attribute.Enumeration<
-      ['new', 'read', 'replied', 'archieved']
+      ['new', 'read', 'replied', 'archived']
     > &
       Schema.Attribute.DefaultTo<'new'>;
     subject: Schema.Attribute.String;

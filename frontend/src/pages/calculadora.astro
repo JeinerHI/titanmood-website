@@ -1,0 +1,585 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Calculadora de Calorías | TitanMood">
+  <Navbar />
+  
+  <main class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 py-20">
+    <div class="container mx-auto px-4 max-w-4xl">
+      
+      <!-- Encabezado -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 mt-12">
+          Calculadora de Calorías
+        </h1>
+        <p class="text-gray-300 text-lg">
+          Calcula tus necesidades calóricas y macronutrientes personalizados
+        </p>
+      </div>
+
+      <!-- Formulario -->
+      <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 mb-8">
+        <form id="calorieForm" class="space-y-6">
+          
+          <!-- Edad -->
+          <div>
+            <label class="block text-white font-semibold mb-2">Edad</label>
+            <input 
+              type="number" 
+              id="age" 
+              min="15" 
+              max="80" 
+              required
+              class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Ej: 25"
+            >
+            <span id="ageError" class="text-red-400 text-sm hidden">Edad debe estar entre 15 y 80 años</span>
+          </div>
+
+          <!-- Peso -->
+          <div>
+            <label class="block text-white font-semibold mb-2">Peso</label>
+            <div class="flex gap-3">
+              <input 
+                type="number" 
+                id="weight" 
+                min="1" 
+                step="0.1" 
+                required
+                class="flex-1 px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="Ej: 70"
+              >
+              <select id="weightUnit" class="px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="kg">kg</option>
+                <option value="lbs">lbs</option>
+              </select>
+            </div>
+            <span id="weightError" class="text-red-400 text-sm hidden">El peso debe ser mayor a 0</span>
+          </div>
+
+          <!-- Altura -->
+          <div>
+            <label class="block text-white font-semibold mb-2">Altura</label>
+            <div class="flex gap-3">
+              <input 
+                type="number" 
+                id="height" 
+                min="1" 
+                step="0.1" 
+                required
+                class="flex-1 px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="Ej: 170"
+              >
+              <select id="heightUnit" class="px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="cm">cm</option>
+                <option value="ft">ft</option>
+              </select>
+            </div>
+            <span id="heightError" class="text-red-400 text-sm hidden">La altura debe ser mayor a 0</span>
+          </div>
+
+          <!-- Género -->
+          <div>
+            <label class="block text-white font-semibold mb-2">Género</label>
+            <div class="flex gap-4">
+              <button type="button" id="maleBtn" class="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                <i class="bi bi-gender-male mr-2"></i>Hombre
+              </button>
+              <button type="button" id="femaleBtn" class="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                <i class="bi bi-gender-female mr-2"></i>Mujer
+              </button>
+            </div>
+            <span id="genderError" class="text-red-400 text-sm hidden">Selecciona un género</span>
+          </div>
+
+          <!-- Nivel de actividad -->
+          <div>
+            <label class="block text-white font-semibold mb-2">Nivel de Actividad</label>
+            <select id="activity" required class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="">Selecciona tu nivel</option>
+              <option value="sedentario">Sedentario (poco o ningún ejercicio)</option>
+              <option value="ligero">Ligero (ejercicio 1-3 días/semana)</option>
+              <option value="moderado">Moderado (ejercicio 3-5 días/semana)</option>
+              <option value="activo">Activo (ejercicio 6-7 días/semana)</option>
+              <option value="muy_activo">Muy Activo (ejercicio intenso diario)</option>
+            </select>
+            <span id="activityError" class="text-red-400 text-sm hidden">Selecciona un nivel de actividad</span>
+          </div>
+
+          <!-- Objetivo -->
+          <div>
+            <label class="block text-white font-semibold mb-3">Objetivo</label>
+            <div class="grid grid-cols-2 gap-4">
+              <button type="button" class="goal-btn px-4 py-4 bg-gray-700 text-white rounded-lg hover:bg-orange-500 transition-colors" data-goal="perder">
+                <i class="bi bi-arrow-down-circle text-2xl mb-2"></i>
+                <div class="font-semibold">Perder Peso</div>
+              </button>
+              <button type="button" class="goal-btn px-4 py-4 bg-gray-700 text-white rounded-lg hover:bg-orange-500 transition-colors" data-goal="definir">
+                <i class="bi bi-bullseye text-2xl mb-2"></i>
+                <div class="font-semibold">Definir</div>
+              </button>
+              <button type="button" class="goal-btn px-4 py-4 bg-gray-700 text-white rounded-lg hover:bg-orange-500 transition-colors" data-goal="mantener">
+                <i class="bi bi-check-circle text-2xl mb-2"></i>
+                <div class="font-semibold">Mantener</div>
+              </button>
+              <button type="button" class="goal-btn px-4 py-4 bg-gray-700 text-white rounded-lg hover:bg-orange-500 transition-colors" data-goal="ganar">
+                <i class="bi bi-arrow-up-circle text-2xl mb-2"></i>
+                <div class="font-semibold">Ganar Músculo</div>
+              </button>
+            </div>
+            <span id="goalError" class="text-red-400 text-sm hidden">Selecciona un objetivo</span>
+          </div>
+
+          <!-- Botón calcular -->
+          <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-orange-500 text-white font-bold py-4 rounded-lg hover:from-blue-700 hover:to-orange-600 transition-all shadow-lg">
+            <i class="bi bi-calculator mr-2"></i>
+            Calcular mis Calorías
+          </button>
+
+        </form>
+      </div>
+
+      <!-- Resultados (oculto inicialmente) -->
+      <div id="results" class="hidden bg-gray-800 rounded-2xl shadow-2xl p-8">
+        
+        <h2 class="text-3xl font-bold text-white mb-6 text-center">Tus Resultados</h2>
+
+        <!-- TMB -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 mb-6 text-center">
+          <div class="text-gray-300 text-sm mb-1">Tasa Metabólica Basal (TMB)</div>
+          <div class="text-5xl font-bold text-white" id="tmbValue">0</div>
+          <div class="text-gray-300 text-sm mt-1">calorías/día</div>
+        </div>
+
+        <!-- Calorías diarias -->
+        <div class="bg-gray-700 rounded-xl p-6 mb-6 text-center">
+          <div class="flex items-center justify-center gap-3">
+            <i class="bi bi-fire text-orange-500 text-3xl"></i>
+            <div>
+              <div class="text-gray-300 text-sm">Calorías Diarias Recomendadas</div>
+              <div class="text-4xl font-bold text-white" id="dailyCalories">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Macronutrientes -->
+        <h3 class="text-xl font-bold text-white mb-4">Distribución de Macronutrientes</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          
+          <!-- Proteína -->
+          <div class="bg-blue-600 rounded-xl p-6 text-center text-white">
+            <i class="bi bi-egg-fried text-3xl mb-2"></i>
+            <div class="text-2xl font-bold" id="proteinGrams">0</div>
+            <div class="text-sm">gramos de Proteína</div>
+            <div class="text-xs mt-1 opacity-75" id="proteinPercent">30%</div>
+          </div>
+
+          <!-- Carbohidratos -->
+          <div class="bg-orange-500 rounded-xl p-6 text-center text-white">
+            <i class="bi bi-basket text-3xl mb-2"></i>
+            <div class="text-2xl font-bold" id="carbsGrams">0</div>
+            <div class="text-sm">gramos de Carbohidratos</div>
+            <div class="text-xs mt-1 opacity-75" id="carbsPercent">40%</div>
+          </div>
+
+          <!-- Grasas -->
+          <div class="bg-green-500 rounded-xl p-6 text-center text-white">
+            <i class="bi bi-droplet-fill text-3xl mb-2"></i>
+            <div class="text-2xl font-bold" id="fatsGrams">0</div>
+            <div class="text-sm">gramos de Grasas</div>
+            <div class="text-xs mt-1 opacity-75" id="fatsPercent">30%</div>
+          </div>
+
+        </div>
+
+        <!-- Barra visual -->
+        <div class="bg-gray-700 rounded-full h-4 mb-6 overflow-hidden flex">
+          <div class="bg-blue-600 h-full" style="width: 30%"></div>
+          <div class="bg-orange-500 h-full" style="width: 40%"></div>
+          <div class="bg-green-500 h-full" style="width: 30%"></div>
+        </div>
+
+        <!-- Recomendación de entrenamiento -->
+        <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 mb-6">
+          <h4 class="text-xl font-bold text-white mb-2">
+            <i class="bi bi-lightning-charge mr-2"></i>
+            Recomendación de Entrenamiento
+          </h4>
+          <div class="text-white" id="trainingRec">-</div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex gap-4">
+          <button id="contactBtn" class="flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all">
+            <i class="bi bi-envelope mr-2"></i>
+            Quiero un Plan Personalizado
+          </button>
+          <button id="recalculateBtn" class="px-6 bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition-all">
+            <i class="bi bi-arrow-clockwise mr-2"></i>
+            Recalcular
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Modal de contacto -->
+  <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+    <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full">
+      
+      <div id="contactForm">
+        <h3 class="text-2xl font-bold text-white mb-4">Solicita tu Plan Personalizado</h3>
+        <p class="text-gray-300 mb-6">Te contactaremos para diseñar un plan adaptado a tus necesidades</p>
+        
+        <form id="leadForm" class="space-y-4">
+          <div>
+            <label class="block text-white font-semibold mb-2">Nombre *</label>
+            <input 
+              type="text" 
+              id="contactName" 
+              required
+              class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+              placeholder="Tu nombre completo"
+            >
+          </div>
+
+          <div>
+            <label class="block text-white font-semibold mb-2">Email *</label>
+            <input 
+              type="email" 
+              id="contactEmail" 
+              required
+              class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+              placeholder="tu@email.com"
+            >
+          </div>
+
+          <div>
+            <label class="block text-white font-semibold mb-2">Teléfono</label>
+            <input 
+              type="tel" 
+              id="contactPhone"
+              class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+              placeholder="+34 600 000 000"
+            >
+          </div>
+
+          <div>
+            <label class="block text-white font-semibold mb-2">Mensaje</label>
+            <textarea 
+              id="contactMessage" 
+              rows="4"
+              class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+              readonly
+            ></textarea>
+          </div>
+
+          <div class="flex gap-3">
+            <button type="submit" class="flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all">
+              Enviar Solicitud
+            </button>
+            <button type="button" id="closeModal" class="px-6 bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition-all">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div id="successMessage" class="hidden text-center">
+        <i class="bi bi-check-circle text-green-500 text-6xl mb-4"></i>
+        <h3 class="text-2xl font-bold text-white mb-2">¡Solicitud Enviada!</h3>
+        <p class="text-gray-300 mb-6">Nos pondremos en contacto contigo pronto</p>
+        <button id="closeSuccess" class="bg-orange-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-orange-600 transition-all">
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Estado de la aplicación
+  let selectedGender = '';
+  let selectedGoal = '';
+
+  // Elementos del DOM
+  const form = document.getElementById('calorieForm');
+  const maleBtn = document.getElementById('maleBtn');
+  const femaleBtn = document.getElementById('femaleBtn');
+  const goalBtns = document.querySelectorAll('.goal-btn');
+  const results = document.getElementById('results');
+  const contactModal = document.getElementById('contactModal');
+  const contactBtn = document.getElementById('contactBtn');
+  const closeModal = document.getElementById('closeModal');
+  const closeSuccess = document.getElementById('closeSuccess');
+  const recalculateBtn = document.getElementById('recalculateBtn');
+  const leadForm = document.getElementById('leadForm');
+
+  // Selección de género
+  maleBtn?.addEventListener('click', () => {
+    selectedGender = 'male';
+    maleBtn.classList.add('bg-blue-600');
+    maleBtn.classList.remove('bg-gray-700');
+    femaleBtn?.classList.remove('bg-blue-600');
+    femaleBtn?.classList.add('bg-gray-700');
+    document.getElementById('genderError')?.classList.add('hidden');
+  });
+
+  femaleBtn?.addEventListener('click', () => {
+    selectedGender = 'female';
+    femaleBtn.classList.add('bg-blue-600');
+    femaleBtn.classList.remove('bg-gray-700');
+    maleBtn?.classList.remove('bg-blue-600');
+    maleBtn?.classList.add('bg-gray-700');
+    document.getElementById('genderError')?.classList.add('hidden');
+  });
+
+  // Selección de objetivo
+  goalBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedGoal = (btn as HTMLElement).dataset.goal || '';
+      goalBtns.forEach(b => {
+        b.classList.remove('bg-orange-500');
+        b.classList.add('bg-gray-700');
+      });
+      btn.classList.add('bg-orange-500');
+      btn.classList.remove('bg-gray-700');
+      document.getElementById('goalError')?.classList.add('hidden');
+    });
+  });
+
+  // Calcular calorías
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Validación
+    let valid = true;
+    const age = parseInt((document.getElementById('age') as HTMLInputElement)?.value || '0');
+    let weight = parseFloat((document.getElementById('weight') as HTMLInputElement)?.value || '0');
+    let height = parseFloat((document.getElementById('height') as HTMLInputElement)?.value || '0');
+    const weightUnit = (document.getElementById('weightUnit') as HTMLSelectElement)?.value;
+    const heightUnit = (document.getElementById('heightUnit') as HTMLSelectElement)?.value;
+    const activity = (document.getElementById('activity') as HTMLSelectElement)?.value;
+
+    // Convertir unidades
+    if (weightUnit === 'lbs') weight = weight * 0.453592;
+    if (heightUnit === 'ft') height = height * 30.48;
+
+    // Validar campos
+    if (age < 15 || age > 80) {
+      document.getElementById('ageError')?.classList.remove('hidden');
+      valid = false;
+    } else {
+      document.getElementById('ageError')?.classList.add('hidden');
+    }
+
+    if (weight <= 0) {
+      document.getElementById('weightError')?.classList.remove('hidden');
+      valid = false;
+    } else {
+      document.getElementById('weightError')?.classList.add('hidden');
+    }
+
+    if (height <= 0) {
+      document.getElementById('heightError')?.classList.remove('hidden');
+      valid = false;
+    } else {
+      document.getElementById('heightError')?.classList.add('hidden');
+    }
+
+    if (!selectedGender) {
+      document.getElementById('genderError')?.classList.remove('hidden');
+      valid = false;
+    }
+
+    if (!activity) {
+      document.getElementById('activityError')?.classList.remove('hidden');
+      valid = false;
+    } else {
+      document.getElementById('activityError')?.classList.add('hidden');
+    }
+
+    if (!selectedGoal) {
+      document.getElementById('goalError')?.classList.remove('hidden');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Calcular TMB (Mifflin-St Jeor)
+    let tmb;
+    if (selectedGender === 'male') {
+      tmb = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+      tmb = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+
+    // Multiplicadores de actividad
+    const activityMultipliers: Record<string, number> = {
+      sedentario: 1.2,
+      ligero: 1.375,
+      moderado: 1.55,
+      activo: 1.725,
+      muy_activo: 1.9
+    };
+
+    // Ajustes de objetivo
+    const goalAdjustments: Record<string, number> = {
+      perder: -500,
+      definir: -300,
+      mantener: 0,
+      ganar: 300
+    };
+
+    const dailyCalories = Math.round(tmb * activityMultipliers[activity] + goalAdjustments[selectedGoal]);
+
+    // Calcular macros
+    const protein = Math.round((dailyCalories * 0.3) / 4);
+    const carbs = Math.round((dailyCalories * 0.4) / 4);
+    const fats = Math.round((dailyCalories * 0.3) / 9);
+
+    // Recomendaciones de entrenamiento
+    const trainingRecs: Record<string, string> = {
+      perder: 'Cardio HIIT + Fuerza: HIIT de 20-30 minutos + 3 días de fuerza para preservar masa muscular',
+      definir: 'Fuerza + Cardio moderado: 4-5 días de fuerza + 2 sesiones de cardio en estado constante',
+      mantener: 'Entrenamiento mixto equilibrado: 3-4 días de fuerza + 2 días de cardio',
+      ganar: 'Fuerza con sobrecarga progresiva: 4-5 días de entrenamiento de hipertrofia, cardio mínimo'
+    };
+
+    // Mostrar resultados
+    document.getElementById('tmbValue')!.textContent = Math.round(tmb).toString();
+    document.getElementById('dailyCalories')!.textContent = dailyCalories.toString();
+    document.getElementById('proteinGrams')!.textContent = protein.toString();
+    document.getElementById('carbsGrams')!.textContent = carbs.toString();
+    document.getElementById('fatsGrams')!.textContent = fats.toString();
+    document.getElementById('trainingRec')!.textContent = trainingRecs[selectedGoal];
+
+    // Pre-llenar mensaje del modal
+    (document.getElementById('contactMessage') as HTMLTextAreaElement)!.value = 
+      `Hola, acabo de calcular mis calorías:\n\n` +
+      `- Objetivo: ${selectedGoal}\n` +
+      `- Calorías diarias: ${dailyCalories} kcal\n` +
+      `- Proteínas: ${protein}g | Carbohidratos: ${carbs}g | Grasas: ${fats}g\n\n` +
+      `Me gustaría recibir un plan personalizado.`;
+
+    // Scroll y mostrar
+    results?.classList.remove('hidden');
+    results?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // Modal de contacto
+  contactBtn?.addEventListener('click', () => {
+    contactModal?.classList.remove('hidden');
+  });
+
+  closeModal?.addEventListener('click', () => {
+    contactModal?.classList.add('hidden');
+  });
+
+  closeSuccess?.addEventListener('click', () => {
+    contactModal?.classList.add('hidden');
+    document.getElementById('contactForm')?.classList.remove('hidden');
+    document.getElementById('successMessage')?.classList.add('hidden');
+  });
+
+  // Enviar formulario de contacto
+// Enviar formulario de contacto
+leadForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = (document.getElementById('contactName') as HTMLInputElement)?.value;
+  const email = (document.getElementById('contactEmail') as HTMLInputElement)?.value;
+  const phone = (document.getElementById('contactPhone') as HTMLInputElement)?.value;
+  const message = (document.getElementById('contactMessage') as HTMLTextAreaElement)?.value;
+
+  // Datos de la calculadora
+  const age = parseInt((document.getElementById('age') as HTMLInputElement)?.value || '0');
+  const weight = parseFloat((document.getElementById('weight') as HTMLInputElement)?.value || '0');
+  const height = parseFloat((document.getElementById('height') as HTMLInputElement)?.value || '0');
+  const dailyCaloriesElement = document.getElementById('dailyCalories');
+  const dailyCalories = dailyCaloriesElement ? parseInt(dailyCaloriesElement.textContent || '0') : 0;
+
+  try {
+    // Enviar a AMBOS: Strapi y n8n en paralelo
+    const [strapiResponse, n8nResponse] = await Promise.all([
+      // 1. Strapi
+      fetch('https://titanmood.com/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: {
+            name,
+            email,
+            phone,
+            message,
+            calculatorData: {
+              age,
+              weight,
+              height,
+              gender: selectedGender,
+              activity: (document.getElementById('activity') as HTMLSelectElement)?.value,
+              goal: selectedGoal,
+              dailyCalories
+            }
+          }
+        })
+      }),
+      // 2. n8n (Google Sheets)
+      fetch('https://n8n.titanmood.com/webhook/lead-calculadora', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          calculatorData: {
+            age,
+            weight,
+            height,
+            gender: selectedGender,
+            activity: (document.getElementById('activity') as HTMLSelectElement)?.value,
+            goal: selectedGoal,
+            dailyCalories
+          }
+        })
+      })
+    ]);
+
+    if (strapiResponse.ok && n8nResponse.ok) {
+      document.getElementById('contactForm')?.classList.add('hidden');
+      document.getElementById('successMessage')?.classList.remove('hidden');
+    } else {
+      alert('Error al enviar. Intenta de nuevo.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error de conexión.');
+  }
+});
+
+  // Recalcular
+  recalculateBtn?.addEventListener('click', () => {
+    (form as HTMLFormElement)?.reset();
+    selectedGender = '';
+    selectedGoal = '';
+    maleBtn?.classList.remove('bg-blue-600');
+    maleBtn?.classList.add('bg-gray-700');
+    femaleBtn?.classList.remove('bg-blue-600');
+    femaleBtn?.classList.add('bg-gray-700');
+    goalBtns.forEach(btn => {
+      btn.classList.remove('bg-orange-500');
+      btn.classList.add('bg-gray-700');
+    });
+    results?.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>

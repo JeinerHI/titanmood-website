@@ -1,0 +1,29 @@
+---
+const { filters = [], activeFilter = 'all' } = Astro.props;
+---
+
+<div class="filter-buttons mb-8">
+  <div class="flex flex-wrap gap-3">
+    <button
+      data-filter="all"
+      class={`filter-btn px-6 py-3 rounded-full font-semibold transition-all ${activeFilter === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-text-secondary hover:bg-gray-200'}`}
+    >
+      Todos
+    </button>
+    
+    {filters.map((filter: any) => (
+      <button
+        data-filter={filter.value}
+        class="filter-btn px-6 py-3 rounded-full font-semibold bg-gray-100 text-text-secondary hover:bg-gray-200 transition-all"
+      >
+        {filter.label}
+      </button>
+    ))}
+  </div>
+</div>
+
+<style>
+  .filter-btn.active {
+    @apply bg-primary text-white;
+  }
+</style>

@@ -4,6 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://titanmood.com',
-  integrations: [sitemap()],
-  integrations: [tailwind()],
+  integrations: [
+    tailwind(),
+    sitemap()
+  ]
 });

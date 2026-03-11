@@ -2,27 +2,31 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import FilterButtons from '../../components/FilterButtons.astro';
 
 const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:1337/api';
 
-// Fetch all articles (sin populate de seo que no existe)
+// Fetch all articles with categories
 const articlesRes = await fetch(`${API_URL}/articles?populate=category&sort=publishedAt:desc`);
 const articlesData = await articlesRes.json();
 const articles = articlesData.data || [];
 
-// Debug: ver qué devuelve la API
-console.log('Articles API response:', JSON.stringify(articlesData, null, 2));
+// Fetch all categories for filters
+const categoriesRes = await fetch(`${API_URL}/categories`);
+const categoriesData = await categoriesRes.json();
+const categories = categoriesData.data || [];
 
-// Verificar si hay error
-if (articlesData.error) {
-  console.error('API Error:', articlesData.error);
-}
+// Prepare filter options
+const filterOptions = categories.map((cat: any) => ({
+  value: cat.name.toLowerCase(),
+  label: cat.name
+}));
 
 // Helper function to calculate reading time
 function calculateReadingTime(content: any[]): number {
     const wordsPerMinute = 200;
-    // content es un array de blocks, extraer el texto
-    const text = content.map((block: any) => 
+    const text = content.map((block: any) =>
     block.children?.map((child: any) => child.text || '').join(' ') || ''
     ).join(' ');
     const wordCount = text.split(/\s+/).length;
@@ -32,21 +36,21 @@ function calculateReadingTime(content: any[]): number {
 // Helper to format date
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  return date.toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   });
 }
 ---
 
 <Layout title="Blog">
   <Navbar />
-  
+
   <!-- Hero Section -->
   <section class="relative py-32 overflow-hidden bg-gradient-to-br from-bg-navy via-surface-navy to-bg-navy">
     <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    
+
     <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
       <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6">
         Blog <span class="text-primary">TitanMood</span>
@@ -57,71 +61,162 @@ function formatDate(dateString: string): string {
     </div>
   </section>
 
+  <!-- Search and Filters -->
+  <section class="py-12 bg-bg-light">
+    <div class="max-w-7xl mx-auto px-6">
+      <SearchBar placeholder="Buscar artículos..." />
+      <FilterButtons filters={filterOptions} />
+      
+      <!-- Results counter -->
+      <div class="text-center mb-6">
+        <p class="text-text-secondary">
+          Mostrando <span id="resultsCount" class="font-bold text-primary">{articles.length}</span> artículos
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- Articles Grid -->
   <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-      {articles.length === 0 ? (
-        <div class="text-center py-20">
-          <i class="bi bi-inbox text-6xl text-text-secondary mb-4"></i>
-          <p class="text-xl text-text-secondary">No hay artículos publicados aún.</p>
-        </div>
-      ) : (
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article: any) => (
-            <article class="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-strong transition-all duration-300">
-              <!-- Category badge -->
-              {article.category && (
-                <div class="p-4 pb-0">
-                    <span class="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
-                        {article.category.name}
-                    </span>
-                </div>
-              )}
-              
-              <!-- Article content -->
-              <div class="p-6">
-                <h2 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                <a href={`/blog/${article.slug}`}>
-                    {article.title}
-                </a>
-                </h2>
+      <div id="articlesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {articles.map((article: any) => (
+          <article 
+            class="article-card group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-strong transition-all duration-300"
+            data-title={article.title.toLowerCase()}
+            data-category={article.category?.name.toLowerCase() || ''}
+            data-excerpt={article.excerpt.toLowerCase()}
+          >
+            {/* Category badge */}
+            {article.category && (
+              <div class="p-4 pb-0">
+                  <span class="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
+                      {article.category.name}
+                  </span>
+              </div>
+            )}
 
-                <p class="text-text-secondary mb-4 line-clamp-3">
-                {article.excerpt}
-                </p>
-                
-                <!-- Meta info -->
-                <div class="flex items-center gap-4 text-sm text-text-secondary">
-                  <div class="flex items-center gap-1">
-                    <i class="bi bi-calendar3"></i>
-                    <span>{formatDate(article.publishedAt)}</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <i class="bi bi-clock"></i>
-                    <span>{calculateReadingTime(article.content)} min</span>
-                  </div>
+            {/* Article content */}
+            <div class="p-6">
+              <h2 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+              <a href={`/blog/${article.slug}`}>
+                  {article.title}
+              </a>
+              </h2>
+
+              <p class="text-text-secondary mb-4 line-clamp-3">
+              {article.excerpt}
+              </p>
+
+              {/* Meta info */}
+              <div class="flex items-center gap-4 text-sm text-text-secondary">
+                <div class="flex items-center gap-1">
+                  <i class="bi bi-calendar3"></i>
+                  <span>{formatDate(article.publishedAt)}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <i class="bi bi-clock"></i>
+                  <span>{calculateReadingTime(article.content)} min</span>
                 </div>
               </div>
-              
-              <!-- Read more -->
-              <div class="px-6 pb-6">
-                <a 
-                  href={`/blog/${article.slug}`}
-                  class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
-                >
-                  <span>Leer más</span>
-                  <i class="bi bi-arrow-right"></i>
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
+            </div>
+
+            {/* Read more */}
+            <div class="px-6 pb-6">
+              <a
+                href={`/blog/${article.slug}`}
+                class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
+              >
+                <span>Leer más</span>
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* No results message */}
+      <div id="noResults" class="hidden text-center py-20">
+        <i class="bi bi-search text-6xl text-text-secondary mb-4"></i>
+        <p class="text-xl text-text-secondary">No se encontraron artículos que coincidan con tu búsqueda.</p>
+      </div>
     </div>
   </section>
 
   <Footer />
 </Layout>
+
+<script>
+  // Search and filter functionality
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const articleCards = document.querySelectorAll('.article-card');
+  const resultsCount = document.getElementById('resultsCount');
+  const articlesGrid = document.getElementById('articlesGrid');
+  const noResults = document.getElementById('noResults');
+
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  function filterArticles() {
+    let visibleCount = 0;
+
+    articleCards.forEach((card) => {
+      const title = card.getAttribute('data-title') || '';
+      const category = card.getAttribute('data-category') || '';
+      const excerpt = card.getAttribute('data-excerpt') || '';
+
+      const matchesSearch = 
+        title.includes(currentSearch) || 
+        excerpt.includes(currentSearch);
+      
+      const matchesFilter = 
+        currentFilter === 'all' || 
+        category === currentFilter;
+
+      if (matchesSearch && matchesFilter) {
+        (card as HTMLElement).style.display = 'block';
+        visibleCount++;
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+
+    // Update results count
+    if (resultsCount) {
+      resultsCount.textContent = visibleCount.toString();
+    }
+
+    // Show/hide no results message
+    if (visibleCount === 0) {
+      articlesGrid?.classList.add('hidden');
+      noResults?.classList.remove('hidden');
+    } else {
+      articlesGrid?.classList.remove('hidden');
+      noResults?.classList.add('hidden');
+    }
+  }
+
+  // Search input handler
+  searchInput?.addEventListener('input', (e) => {
+    currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
+    filterArticles();
+  });
+
+  // Filter buttons handler
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      // Remove active class from all buttons
+      filterButtons.forEach((b) => b.classList.remove('active', 'bg-primary', 'text-white'));
+      
+      // Add active class to clicked button
+      btn.classList.add('active', 'bg-primary', 'text-white');
+      
+      currentFilter = btn.getAttribute('data-filter') || 'all';
+      filterArticles();
+    });
+  });
+</script>
 
 <style>
   .line-clamp-3 {
